@@ -1,0 +1,28 @@
+re_match <- function(x, pattern) {
+    regmatches(x, regexec(pattern, x, perl = T))
+}
+
+
+random_letters <- function(n) {
+    paste(sample(letters, n, replace = TRUE), collapse = "")
+}
+
+
+as_semver <- function(x, simplify = TRUE) {
+    out <- semver::parse_version(gsub("^v", "", x))
+    if (length(out) == 1 && simplify) {
+        out <- out[[1]]
+    }
+    out
+}
+
+download_and_untar <- function(url, temp_dir) {
+    cwd <- getwd()
+    on.exit({
+        setwd(cwd)
+    })
+    setwd(temp_dir)
+    target <- file.path(temp_dir, basename(url))
+    download.file(url, target, quiet = TRUE)
+    untar(target)
+}
