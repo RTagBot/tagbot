@@ -30,3 +30,11 @@ devtools::install_github("randy3k/tagbot")
 ```
 
 ## Example
+
+``` r
+library(tagbot)
+# cd into your package repo
+
+find_commit_to_tag(version = "0.3.0")
+#> [1] "5d33096cdd9390a12398f617feee127d129a6c86"
+```
