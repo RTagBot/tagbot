@@ -1,4 +1,4 @@
 library(testthat)
-library(tagr)
+library(tagbot)
 
-test_check("tagr")
+test_check("tagbot")

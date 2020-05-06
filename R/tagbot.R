@@ -1,3 +1,6 @@
+#' find a commit to tag
+#' @param version a character in semetic version. Use the latest CRAN release version if `NULL`.
+#' @importFrom utils available.packages download.file untar
 #' @export
 find_commit_to_tag <- function(version = NULL) {
     on.exit({
