@@ -1,12 +1,12 @@
 Package: tagbot
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Git Tag Helper for CRAN Releases
+Version: 0.1.0
 Authors@R: 
     person(given = "Randy",
            family = "Lai",
            role = c("aut", "cre"),
            email = "randy.cs.lai@gmail.com")
-Description: What the package does (one paragraph).
+Description: Identify which commit corresponds to a specific cran release.
 License: MIT + file LICENSE
 URL: https://github.com/randy3k/tagbot
 BugReports: https://github.com/randy3k/tagbot/issues
@@ -15,7 +15,7 @@ Suggests:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0.9000
+RoxygenNote: 7.1.0
 Imports: 
     git,
     rprojroot,

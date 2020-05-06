@@ -8,12 +8,8 @@ random_letters <- function(n) {
 }
 
 
-as_semver <- function(x, simplify = TRUE) {
-    out <- semver::parse_version(gsub("^v", "", x))
-    if (length(out) == 1 && simplify) {
-        out <- out[[1]]
-    }
-    out
+as_semver <- function(x) {
+    semver::parse_version(gsub("^v", "", x))
 }
 
 download_and_untar <- function(url, temp_dir) {
