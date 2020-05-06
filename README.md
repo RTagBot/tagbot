@@ -4,15 +4,15 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/randy3k/tagbot/workflows/R-CMD-check/badge.svg)](https://github.com/randy3k/tagbot/actions)
-[![codecov](https://codecov.io/gh/randy3k/tagbot/branch/master/graph/badge.svg)](https://codecov.io/gh/randy3k/tagbot)
+[![R-CMD-check](https://github.com/rtagbot/tagbot/workflows/R-CMD-check/badge.svg)](https://github.com/rtagbot/tagbot/actions)
+[![codecov](https://codecov.io/gh/rtagbot/tagbot/branch/master/graph/badge.svg)](https://codecov.io/gh/rtagbot/tagbot)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/tagbot)](https://cran.r-project.org/package=tagbot)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/tagbot)](https://cran.r-project.org/package=tagbot)
 <!-- badges: end -->
 
-Github: <https://github.com/randy3k/tagbot>
+Github: <https://github.com/RTagBot/tagbot>
 
-Documentation: <https://randy3k.github.io/tagbot>
+Documentation: <https://rtagbot.github.io/tagbot>
 
 Identify which commit corresponds to a specific cran release.
 
@@ -28,7 +28,7 @@ And the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("randy3k/tagbot")
+devtools::install_github("rtagbot/tagbot")
 ```
 
 ## Example

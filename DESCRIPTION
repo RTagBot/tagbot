@@ -8,8 +8,8 @@ Authors@R:
            email = "randy.cs.lai@gmail.com")
 Description: Identify which commit corresponds to a specific cran release.
 License: MIT + file LICENSE
-URL: https://github.com/randy3k/tagbot
-BugReports: https://github.com/randy3k/tagbot/issues
+URL: https://github.com/RTagBot/tagbot
+BugReports: https://github.com/RTagBot/tagbot/issues
 Suggests: 
     testthat
 Encoding: UTF-8
@@ -21,4 +21,4 @@ Imports:
     rprojroot,
     semver
 Remotes:
-    randy3k/git
+    rtagbot/git
