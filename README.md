@@ -6,11 +6,13 @@
 
 [![R-CMD-check](https://github.com/randy3k/tagbot/workflows/R-CMD-check/badge.svg)](https://github.com/randy3k/tagbot/actions)
 [![codecov](https://codecov.io/gh/randy3k/tagbot/branch/master/graph/badge.svg)](https://codecov.io/gh/randy3k/tagbot)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/tagbot)](https://cran.r-project.org/package=tagbot)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/tagbot)](https://cran.r-project.org/package=tagbot)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/tagbot)](https://cran.r-project.org/package=tagbot)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/tagbot)](https://cran.r-project.org/package=tagbot)
 <!-- badges: end -->
 
-Documentation: [http://randy3k.github.io/tagbot](https://randy3k.github.io/tagbot)
+Github: <https://github.com/randy3k/tagbot>
+
+Documentation: <https://randy3k.github.io/tagbot>
 
 Identify which commit corresponds to a specific cran release.
 
