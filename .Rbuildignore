@@ -2,4 +2,4 @@
 ^README\.Rmd$
 ^\.github$
 ^docs$
-^docker$
+^Dockerfile$

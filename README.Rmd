@@ -54,3 +54,7 @@ library(tagbot)
 find_commit_to_tag(version = "0.3.0")
 #> [1] "5d33096cdd9390a12398f617feee127d129a6c86"
 ```
+
+## Docker
+
+A docker image with tagbot preinstalled in avaiable at docker [hub](https://hub.docker.com/r/rtagbot/tagbot).
