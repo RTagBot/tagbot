@@ -5,6 +5,10 @@
 "_PACKAGE"
 
 
+## quiets concerns of R CMD check re: the .'s that appear in pipelines
+# from https://github.com/jennybc/googlesheets/blob/master/R/googlesheets.R
+if (getRversion() >= "2.15.1") utils::globalVariables(c("."))
+
 
 #' find a commit to tag
 #' @param version a character in semetic version. Use the latest CRAN release version if `NULL`.
