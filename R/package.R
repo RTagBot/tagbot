@@ -17,6 +17,40 @@ match_description <- function(dcran, d) {
 }
 
 
+release_history <- function(pkgnm, repos = getOption("repos")) {
+    if (is.null(repos)) {
+        repos <- "https://cran.rstudio.com"
+    }
+
+    archive <- NULL
+    for (repo in repos) {
+        archive <- tryCatch({
+                con <- gzcon(url(sprintf("%s/src/contrib/Meta/archive.rds", repo), "rb"))
+                on.exit(close(con))
+                readRDS(con)
+            },
+            warning = function(e) NULL,
+            error = function(e) NULL)
+        if (!is.null(archive) && pkgnm %in% names(archive)) {
+            break
+        }
+    }
+    if (is.null(archive) || !(pkgnm %in% names(archive))) {
+        stop("cannot find package '", pkgnm, "' in archive", call. = FALSE)
+    }
+    row.names(archive[[pkgnm]]) %>%
+        re_match(sprintf("%s/%s_(.*?)\\.tar.gz", pkgnm, pkgnm)) %>%
+        map_chr(2) %>%
+        map(function(v) list(
+            version = v,
+            url = paste0(
+                repo,
+                "/src/contrib/Archive/",
+                sprintf("%s/%s_%s.tar.gz", pkgnm, pkgnm, v))
+        ))
+}
+
+
 download_info <- function(pkgnm, version = NULL, repos = getOption("repos")) {
     if (is.null(repos)) {
         repos <- "https://cran.rstudio.com"
@@ -37,29 +71,11 @@ download_info <- function(pkgnm, version = NULL, repos = getOption("repos")) {
         stop("cannot find package '", pkgnm, "'", call. = FALSE)
     }
 
-    archive <- NULL
-    for (repo in repos) {
-        archive <- tryCatch({
-                con <- gzcon(url(sprintf("%s/src/contrib/Meta/archive.rds", repo), "rb"))
-                on.exit(close(con))
-                readRDS(con)
-            },
-            warning = function(e) NULL,
-            error = function(e) NULL)
-        if (!is.null(archive) && pkgnm %in% names(archive)) {
-            break
-        }
-    }
-    if (is.null(archive) || !(pkgnm %in% names(archive))) {
-        stop("cannot find package '", pkgnm, "'", call. = FALSE)
-    }
-    url_path <- sprintf("%s/%s_%s.tar.gz", pkgnm, pkgnm, version)
-    if (!(url_path %in% row.names(archive[["collections"]]))) {
+    history <- release_history(pkgnm)
+    if (!(version %in% map(history, "version"))) {
         stop("version ", version, " is not valid for '", pkgnm, "'", call. = FALSE)
     }
-    list(
-        version = version,
-        url = paste0(repo, "/src/contrib/Archive/", url_path)
-    )
-
+    history %>%
+        keep(~ .$version == version) %>%
+        pluck(1)
 }

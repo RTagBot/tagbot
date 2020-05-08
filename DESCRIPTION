@@ -18,6 +18,9 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Imports: 
     git,
+    glue,
+    gh,
+    purrr,
     rprojroot,
     semver
 Remotes:

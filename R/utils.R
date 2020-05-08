@@ -1,5 +1,46 @@
-re_match <- function(x, pattern) {
-    regmatches(x, regexec(pattern, x, perl = T))
+re_match <- function(x, pattern, perl = TRUE) {
+    regmatches(x, regexec(pattern, x, perl = perl))
+}
+
+re_match_all <- function(x, pattern, perl = TRUE) {
+    lapply(re_search_all(x, pattern, perl),
+        function(x) {
+            re_match(x, pattern, perl)
+        }
+    )
+}
+
+re_search <- function(x, pattern, perl = TRUE) {
+    regmatches(x, regexpr(pattern, x, perl = perl))
+}
+
+re_search_all <- function(x, pattern, perl = TRUE) {
+    regmatches(x, gregexpr(pattern, x, perl = perl))
+}
+
+re_match1 <- function(x, pattern, perl = TRUE) {
+    stopifnot(length(x) == 1)
+    re_match(x, pattern, perl)[[1]]
+}
+
+re_match_all1 <- function(x, pattern, perl = TRUE) {
+    stopifnot(length(x) == 1)
+    re_match_all(x, pattern, perl)[[1]]
+}
+
+re_search1 <- function(x, pattern, perl = TRUE) {
+    stopifnot(length(x) == 1)
+    re_search(x, pattern, perl)[[1]]
+}
+
+re_search_all1 <- function(x, pattern, perl = TRUE) {
+    stopifnot(length(x) == 1)
+    re_search_all(x, pattern, perl)[[1]]
+}
+
+strsplit1 <- function(x, pattern, fixed = FALSE, perl = TRUE) {
+    stopifnot(length(x) == 1)
+    strsplit(x, fixed = fixed, pattern, perl = perl)[[1]]
 }
 
 

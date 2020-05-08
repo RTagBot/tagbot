@@ -1,6 +1,13 @@
+#' @docType package
+#' @importFrom utils available.packages download.file untar
+#' @import purrr
+#' @importFrom glue glue
+"_PACKAGE"
+
+
+
 #' find a commit to tag
 #' @param version a character in semetic version. Use the latest CRAN release version if `NULL`.
-#' @importFrom utils available.packages download.file untar
 #' @export
 find_commit_to_tag <- function(version = NULL) {
     on.exit({
@@ -15,7 +22,7 @@ find_commit_to_tag <- function(version = NULL) {
     info <- download_info(pkgnm, version)
 
     if (is.null(version)) {
-        latest_tag <- get_latest_tag()
+        latest_tag <- git_latest_tag()
         if (!is.null(latest_tag) && as_semver(latest_tag) == as_semver(info$version)) {
             stop("latest tag is the current version", call. = FALSE)
         }
@@ -32,14 +39,14 @@ find_commit_to_tag <- function(version = NULL) {
     watched_files <- sapply(watched_files, function(x) x[2])
 
     desc_cran <- describe(file.path(work_tree, "DESCRIPTION"))
-    commits <- get_commits_between(latest_tag, "HEAD")
-    for (commit in commits) {
-        modified_files <- get_modified_files(commit, work_tree)
+    hashes <- git_commit_hashes_between(latest_tag, "HEAD")
+    for (hash in hashes) {
+        modified_files <- git_list_modified_files(hash, work_tree)
         modified_files <- intersect(modified_files, watched_files)
         if (length(modified_files) == 0 || identical(modified_files, "DESCRIPTION")) {
-            desc_commit <- describe(textConnection(get_file_content(commit, "DESCRIPTION")))
+            desc_commit <- describe(textConnection(git_file_content(hash, "DESCRIPTION")))
             if (match_description(desc_cran, desc_commit)) {
-                return(commit)
+                return(hash)
             }
         }
     }
