@@ -1,3 +1,13 @@
+github_repo_name_from_desc <- function() {
+    projroot <- rprojroot::find_package_root_file(".")
+    desc <- describe(file.path(projroot, "DESCRIPTION"))
+    if (!is.null(desc$URL) && startsWith(desc$URL, "https://github.com/")) {
+        return(gsub("https://github.com/", "", desc$URL))
+    }
+    NULL
+}
+
+
 github_repo_name_from_remote <- function() {
     upstream <- tryCatch(
         git_upstream_from_active_branch(),
@@ -12,17 +22,11 @@ github_repo_name_from_remote <- function() {
     NULL
 }
 
-github_repo_name_from_desc <- function() {
-    projroot <- rprojroot::find_package_root_file(".")
-    desc <- describe(file.path(projroot, "DESCRIPTION"))
-    if (!is.null(desc$URL) && startsWith(desc$URL, "https://github.com/")) {
-        return(gsub("https://github.com/", "", desc$URL))
-    }
-    NULL
-}
 
 github_repo <- function() {
-    repo <- github_repo_name_from_desc()
+    repo <- tryCatch(
+        github_repo_name_from_desc(),
+        error = function(e) NULL)
     if (is.null(repo)) {
         # if URL doesn't work, we try to parse it from `git remote`
         repo <- github_repo_name_from_remote()
@@ -32,6 +36,7 @@ github_repo <- function() {
     }
     structure(as.list(strsplit1(repo, "/")), names = c("owner", "repo"))
 }
+
 
 # https://help.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue
 github_closed_issues_from_message <- function(message) {
@@ -51,11 +56,15 @@ github_closed_issues_from_commits <- function(commits) {
 }
 
 
-github_pull_requests <- function() {
+github_pull_requests <- function(state = "closed", base = "master", sort = "updated") {
     repo <- github_repo()
     gh::gh(
         "GET /repos/:owner/:repo/pulls",
-        owner = repo$owner, repo = repo$repo
+        owner = repo$owner,
+        repo = repo$repo,
+        state = state,
+        base = base,
+        sort = sort
     )
 }
 

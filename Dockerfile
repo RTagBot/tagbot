@@ -2,7 +2,8 @@ FROM rocker/r-ver
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
-  git
+  git \
+  libcurl4-openssl-dev
 
 COPY . /tagbot
 

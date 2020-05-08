@@ -23,18 +23,18 @@ find_commit_to_tag <- function(version = NULL) {
     projroot <- rprojroot::find_package_root_file(".")
     desc <- describe(file.path(projroot, "DESCRIPTION"))
     pkgnm <- desc$Package
-    info <- download_info(pkgnm, version)
+    dlinfo <- pkg_download_link(pkgnm, version)
 
     if (is.null(version)) {
         latest_tag <- git_latest_tag()
-        if (!is.null(latest_tag) && as_semver(latest_tag) == as_semver(info$version)) {
+        if (!is.null(latest_tag) && as_semver(latest_tag) == as_semver(dlinfo$version)) {
             stop("latest tag is the current version", call. = FALSE)
         }
     } else {
         latest_tag <- NULL
     }
 
-    download_and_untar(info$url, tempd)
+    download_and_untar(dlinfo$url, tempd)
     work_tree <- file.path(tempd, pkgnm)
     watched_files <- re_match(
         readLines(file.path(work_tree, "MD5")),

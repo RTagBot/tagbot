@@ -17,11 +17,10 @@ match_description <- function(dcran, d) {
 }
 
 
-release_history <- function(pkgnm, repos = getOption("repos")) {
+pkg_archived_releases <- function(pkgnm, repos = getOption("repos")) {
     if (is.null(repos)) {
         repos <- "https://cran.rstudio.com"
     }
-
     archive <- NULL
     for (repo in repos) {
         archive <- tryCatch({
@@ -51,31 +50,41 @@ release_history <- function(pkgnm, repos = getOption("repos")) {
 }
 
 
-download_info <- function(pkgnm, version = NULL, repos = getOption("repos")) {
+pkg_latest_release <- function(pkgnm, repos = getOption("repos")) {
+    if (is.null(repos)) {
+        repos <- "https://cran.rstudio.com"
+    }
+    ava_pkgs <- available.packages(type = "source", repos = repos)
+    if (!pkgnm %in% row.names(ava_pkgs)) {
+        stop("cannot find package '", pkgnm, "'", call. = FALSE)
+    }
+    row <- ava_pkgs[which(row.names(ava_pkgs) == pkgnm)[1], ]
+    url <- paste0(row[["Repository"]], "/", row[["Package"]], "_", row[["Version"]], ".tar.gz")
+    list(
+        version = ava_pkgs[pkgnm, "Version"],
+        url = url
+    )
+}
+
+
+pkg_download_link <- function(pkgnm, version = NULL, repos = getOption("repos")) {
     if (is.null(repos)) {
         repos <- "https://cran.rstudio.com"
     }
 
-    ava_pkgs <- available.packages(type = "source", repos = repos)
-    if (pkgnm %in% row.names(ava_pkgs)) {
-        row <- ava_pkgs[which(row.names(ava_pkgs) == pkgnm)[1], ]
-        url <- paste0(row[["Repository"]], "/", row[["Package"]], "_", row[["Version"]], ".tar.gz")
-        current <- list(
-            version = ava_pkgs[pkgnm, "Version"],
-            url = url
-        )
-        if (is.null(version) || current$version == version) {
-            return(current)
-        }
-    } else if (is.null(version)) {
-        stop("cannot find package '", pkgnm, "'", call. = FALSE)
+    if (is.null(version)) {
+        return(pkg_latest_release(pkgnm, repos))
     }
 
-    history <- release_history(pkgnm)
-    if (!(version %in% map(history, "version"))) {
-        stop("version ", version, " is not valid for '", pkgnm, "'", call. = FALSE)
+    release <- pkg_archived_releases(pkgnm, repos = repos) %>%
+        detect(~ .$version == version)
+    if (!is.null(release)) {
+        return(release)
     }
-    history %>%
-        keep(~ .$version == version) %>%
-        pluck(1)
+    release <- pkg_latest_release(pkgnm, repos)
+    if (version == release$version) {
+        return(release)
+    }
+
+    stop("version ", version, " is not valid for '", pkgnm, "'", call. = FALSE)
 }
