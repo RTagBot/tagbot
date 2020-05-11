@@ -20,8 +20,8 @@ Imports:
     git,
     glue,
     gh,
+    lubridate,
     purrr,
-    rprojroot,
-    semver
+    rprojroot
 Remotes:
     rtagbot/git

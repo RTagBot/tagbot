@@ -1,60 +1,69 @@
+git_tag <- function() {
+    git("tag", paste0(
+            "--format=",
+            "%(refname)%03",
+            "%(*objectname)%03%(objectname)%03",
+            "%(*committerdate:iso8601)%03%(committerdate:iso8601)")) %>%
+        strsplit1("\n") %>%
+        map(function(x) {
+            strsplit1(x, "\x03") %>% {
+                list(
+                    tag = gsub("refs/tags/", "", .[1]),
+                    sha = if (nzchar(.[2])) .[2] else .[3],
+                    time = lubridate::ymd_hms(if (nzchar(.[4])) .[4] else .[5])
+                )
+            }
+        })
+}
+
+
 git_latest_tag <- function() {
-    tags <- strsplit1(git::git("tag"), "\n")
-    semver <- as_semver(tags)
-    tags <- tags[vapply(semver, function(x) x == max(semver), logical(1))]
-    if (length(tags) == 0) {
-        NULL
-    } else if (length(tags) >= 1) {
-        tags[1]
-    }
+    tags <- git_tag()
+    tags %>% detect(~ .$time == max(map_dbl(tags, "time")))
 }
 
 
 git_upstream_from_active_branch <- function() {
-    git::git("rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}")
+    git("rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}")
 }
 
 
-git_format_refs <- function(from, to) {
-    if (is.null(from) && is.null(to)) {
-        from_to <- "HEAD"
-    } else if (is.null(from)) {
-        from_to <- to
-    } else if (is.null(to)) {
-        from_to <- glue("{from}..HEAD")
-    } else {
-        from_to <- glue("{from}..{to}")
-    }
-    from_to
-}
-
-
-git_commit_hashes_between <- function(from = NULL, to = NULL) {
-    git::git("log", "--format=%H", git_format_refs(from, to)) %>%
+git_rev_list <- function(ref) {
+    git("rev-list", ref) %>%
         strsplit1("\n")
 }
 
-git_commits_between <- function(from = NULL, to = NULL) {
-    git::git("log", "--format=%H%x03%B%x04", git_format_refs(from, to)) %>%
+
+git_log <- function(ref, since = NULL) {
+    if (!is.null(since)) {
+        since <- glue("--since={lubridate::format_ISO8601(since, usetz = TRUE)}")
+    }
+    git(!!!c(
+            "log",
+            "--format=%H%x03%B%x03%cI%x04",
+            since,
+            ref
+        )) %>%
         strsplit1("\x04\n") %>%
         map(function(x) {
             strsplit1(x, "\x03") %>%
-            as.list() %>%
-            set_names(c("sha", "message"))
+                as.list() %>%
+                set_names(c("sha", "message", "time")) %>%
+                modify_at(3, lubridate::ymd_hms)
         })
 }
 
 
 git_file_content <- function(commit, path) {
-    git::git("ls-tree", commit, path) %>%
+    git("ls-tree", commit, path) %>%
         strsplit1("\\s+") %>%
         pluck(3) %>%
-        git::git("show", .)
+        git("show", .)
 }
 
 
 git_list_modified_files <- function(commit, work_tree) {
-    git::git(
+    git(
         glue("--work-tree={work_tree}"),
         "diff",
         "--name-only",

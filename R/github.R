@@ -41,7 +41,7 @@ github_repo <- function() {
 # https://help.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue
 github_closed_issues_from_message <- function(message) {
     re_match_all1(
-        message,
+        tolower(message),
         "\\b(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) (#\\d+)\\b"
     ) %>%
         map_chr(2)
@@ -56,15 +56,15 @@ github_closed_issues_from_commits <- function(commits) {
 }
 
 
-github_pull_requests <- function(state = "closed", base = "master", sort = "updated") {
-    repo <- github_repo()
+github_issues <- function(since) {
+    ghrepo <- github_repo()
     gh::gh(
-        "GET /repos/:owner/:repo/pulls",
-        owner = repo$owner,
-        repo = repo$repo,
-        state = state,
-        base = base,
-        sort = sort
+        "GET /repos/:owner/:repo/issues",
+        owner = ghrepo$owner,
+        repo = ghrepo$repo,
+        state = "closed",
+        sort = "updated",
+        since = lubridate::ymd_hms(since)
     )
 }
 

@@ -51,8 +51,27 @@ devtools::install_github("rtagbot/tagbot")
 library(tagbot)
 # cd into your package repo
 
-find_commit_to_tag(version = "0.3.0")
-#> [1] "5d33096cdd9390a12398f617feee127d129a6c86"
+find_release(version = "0.3.1")
+#> $version
+#> [1] "0.3.1"
+#> 
+#> $url
+#> [1] "https://cran.rstudio.com/src/contrib/collections_0.3.1.tar.gz"
+#> 
+#> $release_time
+#> [1] NA
+#> 
+#> $latest
+#> [1] TRUE
+#> 
+#> $tag
+#> [1] "v0.3.1"
+#> 
+#> $tag_time
+#> [1] "2020-04-30 03:32:56 UTC"
+#> 
+#> $sha
+#> [1] "30341faa249dfd52aa35849081a9e253fee748d9"
 ```
 
 ## Docker

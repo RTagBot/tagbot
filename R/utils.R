@@ -44,22 +44,21 @@ strsplit1 <- function(x, pattern, fixed = FALSE, perl = TRUE) {
 }
 
 
-random_letters <- function(n) {
-    paste(sample(letters, n, replace = TRUE), collapse = "")
-}
-
-
-as_semver <- function(x) {
-    semver::parse_version(gsub("^v", "", x))
-}
-
-download_and_untar <- function(url, temp_dir) {
-    cwd <- getwd()
-    on.exit({
-        setwd(cwd)
-    })
-    setwd(temp_dir)
-    target <- file.path(temp_dir, basename(url))
-    download.file(url, target, quiet = TRUE)
-    untar(target)
+compare_version <- function(ver1 , ver2) {
+    ver1 <- as.integer(strsplit1(ver1, "[.-]"))
+    ver2 <- as.integer(strsplit1(ver2, "[.-]"))
+    dlen <- length(ver2) - length(ver1)
+    if (dlen > 0) {
+        ver1 <- c(ver1, integer(dlen))
+    } else {
+        ver2 <- c(ver2, integer(-dlen))
+    }
+    for (i in seq_len(length(ver1))) {
+        if (ver1[i] < ver2[i]) {
+            return(-1L)
+        } else if (ver1[i] > ver2[i]) {
+            return(1L)
+        }
+    }
+    return(0L)
 }

@@ -4,16 +4,10 @@ describe <- function(path) {
 }
 
 
-match_description <- function(dcran, d) {
-    nms1 <- names(dcran)
-    nms2 <- names(d)
-    # for (nm in intersect(nms1, nms2)) {
-    for (nm in c("Package", "Version")) {
-        if (dcran[[nm]] != d[[nm]]) {
-            return(FALSE)
-        }
-    }
-    return(TRUE)
+pkg_name <- function() {
+    projroot <- rprojroot::find_package_root_file(".")
+    desc <- describe(file.path(projroot, "DESCRIPTION"))
+    desc$Package
 }
 
 
@@ -21,32 +15,50 @@ pkg_archived_releases <- function(pkgnm, repos = getOption("repos")) {
     if (is.null(repos)) {
         repos <- "https://cran.rstudio.com"
     }
-    archive <- NULL
     for (repo in repos) {
-        archive <- tryCatch({
-                con <- gzcon(url(sprintf("%s/src/contrib/Meta/archive.rds", repo), "rb"))
-                on.exit(close(con))
-                readRDS(con)
-            },
-            warning = function(e) NULL,
-            error = function(e) NULL)
+        archive <- NULL
+        rdsurl <- sprintf("%s/src/contrib/Meta/archive.rds", repo)
+        target <- file.path(tempdir(), gsub("[:/]", "%", rdsurl))
+        if (file.exists(target)) {
+            archive <- tryCatch(
+                readRDS(target),
+                warning = function(e) NULL,
+                error = function(e) NULL
+            )
+        }
+        if (is.null(archive)) {
+            archive <- tryCatch({
+                    download.file(rdsurl, target, quiet = TRUE)
+                    readRDS(target)
+                },
+                warning = function(e) NULL,
+                error = function(e) NULL)
+        }
         if (!is.null(archive) && pkgnm %in% names(archive)) {
             break
         }
     }
     if (is.null(archive) || !(pkgnm %in% names(archive))) {
-        stop("cannot find package '", pkgnm, "' in archive", call. = FALSE)
+        return(list())
     }
-    row.names(archive[[pkgnm]]) %>%
+    pkgdata <- archive[[pkgnm]]
+    versions <- row.names(pkgdata) %>%
         re_match(sprintf("%s/%s_(.*?)\\.tar.gz", pkgnm, pkgnm)) %>%
-        map_chr(2) %>%
-        map(function(v) list(
+        map_chr(2)
+    ctimes <- lubridate::with_tz(pkgdata$mtime, tzone = "UTC")
+    ord <- order(ctimes)
+    map2(versions[ord], ctimes[ord],
+        function(v, t) list(
+            package = pkgnm,
             version = v,
             url = paste0(
                 repo,
                 "/src/contrib/Archive/",
-                sprintf("%s/%s_%s.tar.gz", pkgnm, pkgnm, v))
-        ))
+                sprintf("%s/%s_%s.tar.gz", pkgnm, pkgnm, v)),
+            time = t,
+            latest = FALSE
+        )
+    )
 }
 
 
@@ -56,18 +68,29 @@ pkg_latest_release <- function(pkgnm, repos = getOption("repos")) {
     }
     ava_pkgs <- available.packages(type = "source", repos = repos)
     if (!pkgnm %in% row.names(ava_pkgs)) {
-        stop("cannot find package '", pkgnm, "'", call. = FALSE)
+        return(list())
     }
     row <- ava_pkgs[which(row.names(ava_pkgs) == pkgnm)[1], ]
     url <- paste0(row[["Repository"]], "/", row[["Package"]], "_", row[["Version"]], ".tar.gz")
     list(
+        package = pkgnm,
         version = ava_pkgs[pkgnm, "Version"],
-        url = url
+        url = url,
+        time = NA,
+        latest = TRUE
     )
 }
 
 
-pkg_download_link <- function(pkgnm, version = NULL, repos = getOption("repos")) {
+pkg_releases <- function(pkgnm, repos = getOption("repos")) {
+    c(
+        pkg_archived_releases(pkgnm, repos),
+        list(pkg_latest_release(pkgnm, repos))
+    )
+}
+
+
+pkg_release <- function(pkgnm, version = NULL, repos = getOption("repos")) {
     if (is.null(repos)) {
         repos <- "https://cran.rstudio.com"
     }
@@ -85,6 +108,24 @@ pkg_download_link <- function(pkgnm, version = NULL, repos = getOption("repos"))
     if (version == release$version) {
         return(release)
     }
+    return(NULL)
+}
 
-    stop("version ", version, " is not valid for '", pkgnm, "'", call. = FALSE)
+
+pkg_release_download <- function(release) {
+    td <- tempdir()
+    pkgnm <- release$package
+    pkgnm_ver <- paste0(pkgnm, "_", release$version)
+    outdir <- file.path(td, pkgnm, pkgnm_ver)
+    if (!dir.exists(outdir)) {
+        tarfile <- file.path(td, pkgnm, basename(release$url))
+        dir.create(dirname(tarfile), showWarnings = FALSE)
+        download.file(release$url, tarfile, quiet = TRUE)
+        cwd <- getwd()
+        on.exit(setwd(cwd))
+        setwd(dirname(tarfile))
+        untar(tarfile)
+        file.rename(pkgnm, pkgnm_ver)
+    }
+    return(outdir)
 }
