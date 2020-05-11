@@ -1,5 +1,5 @@
 #' @docType package
-#' @importFrom utils available.packages download.file untar
+#' @importFrom utils available.packages download.file untar capture.output
 #' @import purrr
 #' @importFrom glue glue
 #' @importFrom git git
@@ -74,6 +74,7 @@ search_for_release <- function(release, since, until) {
     }
 
     work_tree_desc <- describe(file.path(work_tree, "DESCRIPTION"))
+
     for (hash in hashes) {
         modified_files <- git_list_modified_files(hash, work_tree)
         modified_files <- intersect(modified_files, watched_files)
@@ -81,16 +82,12 @@ search_for_release <- function(release, since, until) {
             return(hash)
         } else if (identical(modified_files, "DESCRIPTION")) {
             desc <- describe(textConnection(git_file_content(hash, "DESCRIPTION")))
-            if (desc$Package == release$package && desc$Version == release$version) {
-                nms1 <- names(desc)
-                nms2 <- names(work_tree_desc)
-                for (nm in intersect(nms1, nms2)) {
-                    if (gsub("\\s", "", desc[[nm]]) != gsub("\\s", "", work_tree_desc[[nm]])) {
-                        warning("the field", nm, "are different")
-                    }
+            for (nm in intersect(names(desc), names(work_tree_desc))) {
+                if (gsub("\\s", "", desc[[nm]]) != gsub("\\s", "", work_tree_desc[[nm]])) {
+                    next
                 }
-                return(hash)
             }
+            return(hash)
         }
     }
     return(NULL)

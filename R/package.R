@@ -1,5 +1,6 @@
 describe <- function(path) {
-    desc <- read.dcf(path)
+    # make sure the file is imported as cran
+    desc <- read.dcf(textConnection(capture.output(write.dcf(read.dcf(path), ""))))
     structure(as.list(desc), names = colnames(desc))
 }
 
