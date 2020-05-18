@@ -34,14 +34,18 @@ git_rev_list <- function(ref) {
 }
 
 
-git_log <- function(ref, since = NULL) {
+git_log <- function(ref, since = NULL, limit = NULL) {
     if (!is.null(since)) {
         since <- glue("--since={lubridate::format_ISO8601(since, usetz = TRUE)}")
+    }
+    if (!is.null(limit)) {
+        limit <- glue("--max-count={limit}")
     }
     git(!!!c(
             "log",
             "--format=%H%x03%B%x03%cI%x04",
             since,
+            limit,
             ref
         )) %>%
         strsplit1("\x04\n") %>%

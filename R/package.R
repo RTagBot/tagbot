@@ -56,7 +56,7 @@ pkg_archived_releases <- function(pkgnm, repos = getOption("repos")) {
                 repo,
                 "/src/contrib/Archive/",
                 sprintf("%s/%s_%s.tar.gz", pkgnm, pkgnm, v)),
-            time = t,
+            time = if (is.na(t)) NULL else t,
             latest = FALSE
         )
     )
@@ -77,21 +77,41 @@ pkg_latest_release <- function(pkgnm, repos = getOption("repos")) {
         package = pkgnm,
         version = ava_pkgs[pkgnm, "Version"],
         url = url,
-        time = NA,
+        time = NULL,
         latest = TRUE
     )
 }
 
 
+.releases_cache <- new.env(parent = emptyenv())
+
+
 pkg_releases <- function(pkgnm, repos = getOption("repos")) {
-    c(
+    if (missing(pkgnm)) {
+        pkgnm <- pkg_name()
+    }
+    if (is.null(repos)) {
+        repos <- "https://cran.rstudio.com"
+    }
+    if (hasName(.releases_cache, pkgnm)) {
+        cache <- .releases_cache[[pkgnm]]
+        if (cache$repos == repos) {
+            return(cache$res)
+        }
+    }
+    res <- c(
         pkg_archived_releases(pkgnm, repos),
         list(pkg_latest_release(pkgnm, repos))
     )
+    .releases_cache[[pkgnm]] <- list(res = res, repos = repos)
+    res
 }
 
 
 pkg_release <- function(pkgnm, version = NULL, repos = getOption("repos")) {
+    if (missing(pkgnm)) {
+        pkgnm <- pkg_name()
+    }
     if (is.null(repos)) {
         repos <- "https://cran.rstudio.com"
     }

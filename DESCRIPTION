@@ -22,6 +22,7 @@ Imports:
     gh,
     lubridate,
     purrr,
+    rlang,
     rprojroot
 Remotes:
     rtagbot/git

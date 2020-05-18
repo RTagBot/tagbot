@@ -23,7 +23,13 @@ github_repo_name_from_remote <- function() {
 }
 
 
+.github_repo_cache <- new.env(parent = emptyenv())
+
+
 github_repo <- function() {
+    if (!is.null(.github_repo_cache$value)) {
+        return(.github_repo_cache$value)
+    }
     repo <- tryCatch(
         github_repo_name_from_desc(),
         error = function(e) NULL)
@@ -34,7 +40,9 @@ github_repo <- function() {
     if (is.null(repo)) {
         stop("cannot determine repo name")
     }
-    structure(as.list(strsplit1(repo, "/")), names = c("owner", "repo"))
+    out <- structure(as.list(strsplit1(repo, "/")), names = c("owner", "repo"))
+    .github_repo_cache$value <- out
+    out
 }
 
 
@@ -42,7 +50,7 @@ github_repo <- function() {
 github_closed_issues_from_message <- function(message) {
     re_match_all1(
         tolower(message),
-        "\\b(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) (#\\d+)\\b"
+        "\\b(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) #(\\d+)\\b"
     ) %>%
         map_chr(2)
 }
@@ -56,7 +64,7 @@ github_closed_issues_from_commits <- function(commits) {
 }
 
 
-github_issues <- function(since) {
+github_issues <- function(since = NULL) {
     ghrepo <- github_repo()
     gh::gh(
         "GET /repos/:owner/:repo/issues",
@@ -64,11 +72,19 @@ github_issues <- function(since) {
         repo = ghrepo$repo,
         state = "closed",
         sort = "updated",
-        since = lubridate::ymd_hms(since)
+        since = since,
+        per_page = 100,
+        .limit = Inf
     )
 }
 
 
-get_closed_issues_from_pull_requests <- function(prs) {
-
+github_pull_request <- function(number) {
+    ghrepo <- github_repo()
+    gh::gh(
+        "GET /repos/:owner/:repo/pulls/:pull_number",
+        owner = ghrepo$owner,
+        repo = ghrepo$repo,
+        pull_number = number
+    )
 }

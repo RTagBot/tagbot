@@ -44,7 +44,7 @@ strsplit1 <- function(x, pattern, fixed = FALSE, perl = TRUE) {
 }
 
 
-compare_version <- function(ver1 , ver2) {
+compare_version <- function(ver1, ver2) {
     ver1 <- as.integer(strsplit1(ver1, "[.-]"))
     ver2 <- as.integer(strsplit1(ver2, "[.-]"))
     dlen <- length(ver2) - length(ver1)
