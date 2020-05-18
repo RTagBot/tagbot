@@ -2,10 +2,12 @@
 
 S3method(print,release)
 export(find_release)
+export(tagbot)
 import(purrr)
 importFrom(git,git)
 importFrom(glue,glue)
 importFrom(utils,available.packages)
 importFrom(utils,capture.output)
 importFrom(utils,download.file)
+importFrom(utils,hasName)
 importFrom(utils,untar)

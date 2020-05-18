@@ -142,6 +142,8 @@ search_for_release <- function(release, since, until) {
 
 #' find a release with a given version
 #' @param version the version to search. Use `NULL` to search the latest release version.
+#' @param releases from `pkg_releases()`
+#' @param tags from `git_tags()`
 #' @export
 find_release <- function(version = NULL, releases = NULL, tags = NULL) {
     pkgnm <- pkg_name()

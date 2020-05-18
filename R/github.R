@@ -46,24 +46,6 @@ github_repo <- function() {
 }
 
 
-# https://help.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue
-github_closed_issues_from_message <- function(message) {
-    re_match_all1(
-        tolower(message),
-        "\\b(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) #(\\d+)\\b"
-    ) %>%
-        map_chr(2)
-}
-
-
-github_closed_issues_from_commits <- function(commits) {
-    commits %>%
-        map("message") %>%
-        map(github_closed_issues_from_message) %>%
-        as_vector()
-}
-
-
 github_issues <- function(since = NULL) {
     ghrepo <- github_repo()
     gh::gh(
@@ -87,4 +69,48 @@ github_pull_request <- function(number) {
         repo = ghrepo$repo,
         pull_number = number
     )
+}
+
+
+
+# https://help.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue
+github_closed_issues_from_message <- function(message) {
+    re_match_all1(
+        tolower(message),
+        "\\b(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) #(\\d+)\\b"
+    ) %>%
+        map_chr(2)
+}
+
+
+github_closed_issues_from_commits <- function(commits) {
+    commits %>%
+        map("message") %>%
+        map(github_closed_issues_from_message) %>%
+        as_vector()
+}
+
+
+github_closed_issues <- function(from, to) {
+    commits <- git_log(glue("{trimws(from)}..{trimws(to)}"))
+
+    hashes <- map_chr(commits, "sha")
+
+    since <- commits %>% pluck(length(.), "time")
+    issues <- github_issues(since = since)
+
+    prs <- issues %>%
+        keep(~ hasName(., "pull_request")) %>%
+        keep(function(issue) {
+            pr <- github_pull_request(issue$number)
+            pr$merged && pr$merge_commit_sha %in% hashes
+        })
+
+    closed_by_prs <- prs %>%
+        map(list("body", github_closed_issues_from_message)) %>%
+        flatten_chr()
+
+    closed_by_commits <- github_closed_issues_from_commits(commits)
+
+    sort(union(closed_by_prs, closed_by_commits))
 }

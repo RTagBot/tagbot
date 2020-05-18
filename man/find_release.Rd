@@ -8,6 +8,10 @@ find_release(version = NULL, releases = NULL, tags = NULL)
 }
 \arguments{
 \item{version}{the version to search. Use \code{NULL} to search the latest release version.}
+
+\item{releases}{from \code{pkg_releases()}}
+
+\item{tags}{from \code{git_tags()}}
 }
 \description{
 find a release with a given version
