@@ -83,34 +83,24 @@ github_closed_issues_from_message <- function(message) {
 }
 
 
-github_closed_issues_from_commits <- function(commits) {
-    commits %>%
-        map("message") %>%
-        map(github_closed_issues_from_message) %>%
-        as_vector()
+github_releases <- function() {
+    ghrepo <- github_repo()
+    gh::gh(
+        "GET /repos/:owner/:repo/releases",
+        owner = ghrepo$owner,
+        repo = ghrepo$repo
+    )
 }
 
 
-github_closed_issues <- function(from, to) {
-    commits <- git_log(glue("{trimws(from)}..{trimws(to)}"))
-
-    hashes <- map_chr(commits, "sha")
-
-    since <- commits %>% pluck(length(.), "time")
-    issues <- github_issues(since = since)
-
-    prs <- issues %>%
-        keep(~ hasName(., "pull_request")) %>%
-        keep(function(issue) {
-            pr <- github_pull_request(issue$number)
-            pr$merged && pr$merge_commit_sha %in% hashes
-        })
-
-    closed_by_prs <- prs %>%
-        map(list("body", github_closed_issues_from_message)) %>%
-        flatten_chr()
-
-    closed_by_commits <- github_closed_issues_from_commits(commits)
-
-    sort(union(closed_by_prs, closed_by_commits))
+github_has_release <- function(tag_name) {
+    gh_releases <- tryCatch(
+        github_releases(),
+        error = function(e) NULL
+    )
+    if (is.null(gh_releases)) {
+        return(FALSE)
+    }
+    release_tag_names <- gh_releases %>% map_chr("tag_name")
+    return(tag_name %in% release_tag_names)
 }

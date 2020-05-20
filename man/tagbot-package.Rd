@@ -2,8 +2,6 @@
 % Please edit documentation in R/tagbot.R
 \docType{package}
 \name{tagbot-package}
-\alias{tagbot}
-\alias{tagbot-package}
 \title{tagbot: Git Tag Helper for CRAN Releases}
 \description{
 Identify which commit corresponds to a specific cran release.

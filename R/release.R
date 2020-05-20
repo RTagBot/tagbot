@@ -109,7 +109,7 @@ search_for_release <- function(release, since, until) {
         until <- "HEAD"
     }
     if (is.null(since)) {
-        hashes <- git_rev_list(since)
+        hashes <- git_rev_list(until)
     } else {
         hashes <- git_rev_list(glue("{since}..{until}"))
     }
@@ -187,6 +187,16 @@ find_release <- function(version = NULL, releases = NULL, tags = NULL) {
         tag_time = NA,
         sha = hash
     )
-    attr(release, "previous") <- bracket$since
+
+    pervious_tagged_release <- bracket$since
+    pervious_release_version <- releases %>%
+        keep(possibly(~ compare_version(.$version, release$version) < 0, FALSE)) %>%
+        pluck(length(.), "version", .default = "")
+
+    if (!is.null(pervious_tagged_release) &&
+            pervious_tagged_release$version == pervious_release_version) {
+        attr(release, "previous") <- pervious_tagged_release
+    }
+
     release
 }
