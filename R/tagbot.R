@@ -106,5 +106,5 @@ tagbot <- function(version = NULL) {
         name = paste0(release$package, " v", release$version),
         body = tag_msg
     )
-    message(glue("tag {tag} was created successfully\n{status$html_url}"))
+    message(glue("tag {tag_name} was created successfully\n{status$html_url}"))
 }
