@@ -2,17 +2,13 @@
 % Please edit documentation in R/release.R
 \name{find_release}
 \alias{find_release}
-\title{find a release with a given version}
+\title{Find a release that matches the CRAN release.}
 \usage{
-find_release(version = NULL, releases = NULL, tags = NULL)
+find_release(version = NULL)
 }
 \arguments{
-\item{version}{the version to search. Use \code{NULL} to search the latest release version.}
-
-\item{releases}{from \code{pkg_releases()}}
-
-\item{tags}{from \code{git_tags()}}
+\item{version}{the version to find. Use \code{NULL} to find the latest release version.}
 }
 \description{
-find a release with a given version
+Find a release that matches the CRAN release.
 }

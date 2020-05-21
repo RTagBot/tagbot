@@ -69,7 +69,7 @@ pkg_latest_release <- function(pkgnm, repos = getOption("repos")) {
     }
     ava_pkgs <- available.packages(type = "source", repos = repos)
     if (!pkgnm %in% row.names(ava_pkgs)) {
-        return(list())
+        return(NULL)
     }
     row <- ava_pkgs[which(row.names(ava_pkgs) == pkgnm)[1], ]
     url <- paste0(row[["Repository"]], "/", row[["Package"]], "_", row[["Version"]], ".tar.gz")
@@ -99,10 +99,12 @@ pkg_releases <- function(pkgnm, repos = getOption("repos")) {
             return(cache$res)
         }
     }
-    res <- c(
-        pkg_archived_releases(pkgnm, repos),
-        list(pkg_latest_release(pkgnm, repos))
-    )
+    res <- pkg_archived_releases(pkgnm, repos)
+    latest_release <- pkg_latest_release(pkgnm, repos)
+    if (!is.null(latest_release)) {
+        res <- append(res, list(latest_release))
+    }
+    latest_release
     .releases_cache[[pkgnm]] <- list(res = res, repos = repos)
     res
 }

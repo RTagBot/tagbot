@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find a release that matches the CRAN release. — find_release • tagbot</title>
+<title>Show the closed github issues and merged pull requests between commits. — changelog_between • tagbot</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Find a release that matches the CRAN release. — find_release" />
-<meta property="og:description" content="Find a release that matches the CRAN release." />
+<meta property="og:title" content="Show the closed github issues and merged pull requests between commits. — changelog_between" />
+<meta property="og:description" content="Show the closed github issues and merged pull requests between commits." />
 
 
 
@@ -108,23 +108,27 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find a release that matches the CRAN release.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/RTagBot/tagbot/blob/master/R/release.R'><code>R/release.R</code></a></small>
-    <div class="hidden name"><code>find_release.Rd</code></div>
+    <h1>Show the closed github issues and merged pull requests between commits.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/RTagBot/tagbot/blob/master/R/changelog.R'><code>R/changelog.R</code></a></small>
+    <div class="hidden name"><code>changelog_between.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Find a release that matches the CRAN release.</p>
+    <p>Show the closed github issues and merged pull requests between commits.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>find_release</span>(<span class='kw'>version</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>changelog_between</span>(<span class='no'>after</span>, <span class='kw'>before</span> <span class='kw'>=</span> <span class='st'>"HEAD"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>version</th>
-      <td><p>the version to find. Use <code>NULL</code> to find the latest release version.</p></td>
+      <th>after</th>
+      <td><p>character, the start commit</p></td>
+    </tr>
+    <tr>
+      <th>before</th>
+      <td><p>character, the end commit</p></td>
     </tr>
     </table>
 

@@ -47,31 +47,33 @@ devtools::install_github("rtagbot/tagbot")
 ```
 ## Example
 
+Here is an example of [languageserver](https://github.com/REditorSupport/languageserver).
+
 ```r
 library(tagbot)
-# cd into your package repo
+# cd into a local git clone of `languageserver`
 
-find_release(version = "0.3.1")
-#> $version
-#> [1] "0.3.1"
+(release <- tagbot::find_release("0.3.5"))                                                 
+#> languageserver v0.3.5 [tag:v0.3.5, sha:e3ab335]  
+
+tagbot::changelog(release)                                                                 
+#> **Closed issues:**                                                                             
+#> - .lintr defaults are not respected (#235)                                                     
+#> - Upgrade to roxygen2 7.x (#233)                                                               
+#> - respect client capability of snippetSupport (#231)                                           
+#> - Diagnostics not working for one-line document (#222)                                         
+#> - lsp crash on didOpen single file without a workspace folder (#219)                           
+#> - diagnostics_task error on certain parsing error (#218)                                       
 #> 
-#> $url
-#> [1] "https://cran.rstudio.com/src/contrib/collections_0.3.1.tar.gz"
-#> 
-#> $release_time
-#> [1] NA
-#> 
-#> $latest
-#> [1] TRUE
-#> 
-#> $tag
-#> [1] "v0.3.1"
-#> 
-#> $tag_time
-#> [1] "2020-04-30 03:32:56 UTC"
-#> 
-#> $sha
-#> [1] "30341faa249dfd52aa35849081a9e253fee748d9"
+#> **Merged pull requests:**
+#> - Respect linter_file in diagnostics (#236)
+#> - Use roxygen2 7.1 (#234)
+#> - Respect client snippetSupport (#232)
+#> - Remove dependency on stringr (#230)
+#> - Remove dependency on readr (#229)
+#> - Always use content in diagnose_file (#223)
+#> - Fix handling null rootUri (#221)
+#> - Call diagnostics_callback on diagnostics_task error (#220)
 ```
 
 ## Docker

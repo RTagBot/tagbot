@@ -27,8 +27,8 @@ github_repo_name_from_remote <- function() {
 
 
 github_repo <- function() {
-    if (!is.null(.github_repo_cache$value)) {
-        return(.github_repo_cache$value)
+    if (hasName(.github_repo_cache, getwd())) {
+        return(.github_repo_cache[[getwd()]])
     }
     repo <- tryCatch(
         github_repo_name_from_desc(),
@@ -41,7 +41,7 @@ github_repo <- function() {
         stop("cannot determine repo name")
     }
     out <- structure(as.list(strsplit1(repo, "/")), names = c("owner", "repo"))
-    .github_repo_cache$value <- out
+    .github_repo_cache[[getwd()]] <- out
     out
 }
 
@@ -74,7 +74,7 @@ github_pull_request <- function(number) {
 
 
 # https://help.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue
-github_closed_issues_from_message <- function(message) {
+github_extract_issues <- function(message) {
     re_match_all1(
         tolower(message),
         "\\b(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) #(\\d+)\\b"

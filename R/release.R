@@ -1,4 +1,4 @@
-make_release <- function(
+wrap_release <- function(
     package,
     version,
     url = NULL, release_time = NULL, latest = NULL,
@@ -22,7 +22,7 @@ make_release <- function(
 #' @export
 #' @method print release
 print.release <- function(x, ...) {
-    cat(x$package, x$version)
+    cat(x$package, paste0("v", x$version))
     cat(sprintf(" [tag:%s, sha:%s]",
         x$tag %||% "nil", if (is.null(x$sha)) "nil" else substr(x$sha, 1, 7)))
     cat("\n")
@@ -46,72 +46,33 @@ checkout_release <- function(releases, version) {
 }
 
 
-tagged_releases <- function(releases = NULL, tags = NULL) {
-    if (is.null(tags)) {
-        tags <- git_tag()
-    }
-    if (length(tags) == 0) {
-        return(NULL)
-    }
-    tagnms_stripped <- gsub("^v", "", map_chr(tags, "tag"))
-
-    pkgnm <- pkg_name()
-    if (is.null(releases)) {
-        releases <- pkg_releases(pkgnm)
-    }
-    if (length(releases) == 0) {
-        return(NULL)
-    }
-
-    releases %>%
-        keep(~ .$version %in% tagnms_stripped) %>%
-        map(function(r) {
-            tag <- tags %>%
-                detect(~ gsub("^v", "", .$tag) == r$version)
-            make_release(
-                package = pkgnm,
-                version = r$version,
-                url = r$url,
-                release_time = r$time,
-                latest = r$latest,
-                tag = tag$tag,
-                tag_time = tag$time,
-                sha = tag$sha
-            )
-        })
-}
-
-
-search_range <- function(version, t_releases, latest = FALSE) {
+search_range <- function(version, releases, latest = FALSE) {
     pkgnm <- pkg_name()
 
-    if (latest) {
-        since <- t_releases %>% pluck(length(.))
-        until <- NULL
-    } else {
-        since <- t_releases %>%
-            keep(possibly(~ compare_version(.$version, version) < 0, FALSE)) %>%
-            pluck(length(.))
-        until <- t_releases %>%
-            keep(possibly(~ compare_version(.$version, version) > 0, FALSE)) %>%
-            pluck(1)
-    }
+    since <- releases %>%
+        discard(~ is.null(.$sha)) %>%
+        keep(possibly(~ compare_version(.$version, version) < 0, FALSE)) %>%
+        pluck(length(.))
+    until <- releases %>%
+        discard(~ is.null(.$sha)) %>%
+        keep(possibly(~ compare_version(.$version, version) > 0, FALSE)) %>%
+        pluck(1)
     list(since = since, until = until)
 }
 
 
-search_for_release <- function(release, since, until) {
+search_for_release <- function(release, after, before) {
     work_tree <- pkg_release_download(release)
     watched_files <- readLines(file.path(work_tree, "MD5")) %>%
         re_match("[0-9a-f]+ \\*(.*)$") %>%
         map_chr(2)
-    if (is.null(until)) {
-        until <- "HEAD"
+    if (is.null(before)) {
+        before <- "HEAD"
     }
-    if (is.null(since)) {
-        hashes <- git_rev_list(until)
+    if (is.null(after)) {
+        hashes <- git_rev_list(before)
     } else {
-        hashes <- git_rev_list(glue("{since}..{until}"))
+        hashes <- git_rev_list(glue("{after}..{before}"))
     }
 
     work_tree_desc <- describe(file.path(work_tree, "DESCRIPTION"))
@@ -140,59 +101,63 @@ search_for_release <- function(release, since, until) {
 }
 
 
-#' find a release with a given version
-#' @param version the version to search. Use `NULL` to search the latest release version.
-#' @param releases from `pkg_releases()`
-#' @param tags from `git_tags()`
+
+#' List all the releases of the package.
 #' @export
-find_release <- function(version = NULL, releases = NULL, tags = NULL) {
+list_releases <- function() {
+    # TODO: integrate with github releases API
+    releases <- pkg_releases()
+
+    if (length(releases) == 0) {
+        return(list())
+    }
+
+    tags <- git_tag()
+
+    releases %>%
+        map(function(r) {
+            tag <- tags %>%
+                detect(~ gsub("^v", "", .$tag) == r$version)
+            wrap_release(
+                package = r$package,
+                version = r$version,
+                url = r$url,
+                release_time = r$time,
+                latest = r$latest,
+                tag = tag$tag,
+                tag_time = tag$time,
+                sha = tag$sha
+            )
+        })
+}
+
+
+#' Find a release that matches the CRAN release.
+#' @param version the version to find. Use `NULL` to find the latest release version.
+#' @export
+find_release <- function(version = NULL) {
     pkgnm <- pkg_name()
-    if (is.null(releases)) {
-        releases <- pkg_releases(pkgnm)
-    }
-    if (is.null(tags)) {
-        tags <- git_tag()
-    }
     latest <- is.null(version)
+
+    releases <- list_releases()
     release <- checkout_release(releases, version)
 
-    t_releases <- tagged_releases(releases, tags)
-    t_release <- t_releases %>% detect(~.$version == release$version)
-    if (!is.null(t_release)) {
-        return(make_release(
-            package = pkgnm,
-            version = t_release$version,
-            url = t_release$url,
-            release_time = t_release$time,
-            latest = t_release$latest,
-            tag = t_release$tag,
-            tag_time = t_release$tag_time,
-            sha = t_release$sha
-        ))
+    bracket_releases <- search_range(release$version, releases, latest = latest)
+
+    if (is.null(release$sha)) {
+        hash <- search_for_release(release, bracket_releases$since$sha, bracket_releases$until$sha)
+
+        if (is.null(hash)) {
+            stop("cannot determine release", call. = FALSE)
+        }
+        release$sha <- hash
     }
 
-    bracket <- search_range(release$version, t_releases, latest = latest)
-    hash <- search_for_release(release, bracket$since$sha, bracket$until$sha)
-
-    if (is.null(hash)) {
-        stop("cannot determine release", call. = FALSE)
-    }
-    release <- make_release(
-        package = pkgnm,
-        version = release$version,
-        url = release$url,
-        release_time = release$time,
-        latest = release$latest,
-        tag = NULL,
-        tag_time = NA,
-        sha = hash
-    )
-
-    pervious_tagged_release <- bracket$since
     pervious_release_version <- releases %>%
         keep(possibly(~ compare_version(.$version, release$version) < 0, FALSE)) %>%
         pluck(length(.), "version", .default = "")
 
+    pervious_tagged_release <- bracket_releases$since
     if (!is.null(pervious_tagged_release) &&
             pervious_tagged_release$version == pervious_release_version) {
         attr(release, "previous") <- pervious_tagged_release

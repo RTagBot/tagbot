@@ -2,9 +2,9 @@
 % Please edit documentation in R/tagbot.R
 \docType{package}
 \name{tagbot-package}
-\title{tagbot: Git Tag Helper for CRAN Releases}
+\title{tagbot: Publish GitHub Releases}
 \description{
-Identify which commit corresponds to a specific cran release.
+Simplify the process of making a GitHub release. There are three major features provided by 'tagbot'. 1. It performs 'diff' between the source file of a release and the package's git repo to decide which commit is corresponding to the release. 2. It generates a changelog of closed issues and merged pull requested from GitHub API. 3. It publishes a GitHub release with the changelog.
 }
 \seealso{
 Useful links:

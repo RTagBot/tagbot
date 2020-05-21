@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Git Tag Helper for CRAN Releases • tagbot</title>
+<title>Publish GitHub Releases • tagbot</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Git Tag Helper for CRAN Releases">
-<meta property="og:description" content="Identify which commit corresponds to a specific cran release.">
+<script src="pkgdown.js"></script><meta property="og:title" content="Publish GitHub Releases">
+<meta property="og:description" content="Simplify the process of making a GitHub release. There are three major features provided by tagbot. 1. It performs diff between the source file of a release and the package's git repo to decide which commit is corresponding to the release. 2. It generates a changelog of closed issues and merged pull requested from GitHub API. 3. It publishes a GitHub release with the changelog.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -66,14 +66,14 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="git-tag-helper-for-cran-releases" class="section level1">
+<div id="publish-github-releases" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#git-tag-helper-for-cran-releases" class="anchor"></a>Git Tag Helper for CRAN Releases</h1></div>
+<a href="#publish-github-releases" class="anchor"></a>Publish GitHub Releases</h1></div>
 <!-- badges: start -->
 
 <p>Github: <a href="https://github.com/RTagBot/tagbot" class="uri">https://github.com/RTagBot/tagbot</a></p>
 <p>Documentation: <a href="https://rtagbot.github.io/tagbot" class="uri">https://rtagbot.github.io/tagbot</a></p>
-<p>Identify which commit corresponds to a specific cran release.</p>
+<p>Simplify the process of making a GitHub release. There are three major features provided by ‘tagbot’. 1. It performs ‘diff’ between the source file of a release and the package’s git repo to decide which commit is corresponding to the release. 2. It generates a changelog of closed issues and merged pull requested from GitHub API. 3. It publishes a GitHub release with the changelog.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -86,30 +86,31 @@
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
+<p>Here is an example of <a href="https://github.com/REditorSupport/languageserver">languageserver</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tagbot</span>)
-<span class="co"># cd into your package repo</span>
+<span class="co"># cd into a local git clone of `languageserver`</span>
 
-<span class="fu"><a href="reference/find_release.html">find_release</a></span>(<span class="kw">version</span> <span class="kw">=</span> <span class="st">"0.3.1"</span>)
-<span class="co">#&gt; $version</span>
-<span class="co">#&gt; [1] "0.3.1"</span>
+(<span class="no">release</span> <span class="kw">&lt;-</span> <span class="kw pkg">tagbot</span><span class="kw ns">::</span><span class="fu"><a href="reference/find_release.html">find_release</a></span>(<span class="st">"0.3.5"</span>))
+<span class="co">#&gt; languageserver v0.3.5 [tag:v0.3.5, sha:e3ab335]  </span>
+
+<span class="kw pkg">tagbot</span><span class="kw ns">::</span><span class="fu"><a href="reference/changelog.html">changelog</a></span>(<span class="no">release</span>)
+<span class="co">#&gt; **Closed issues:**                                                                             </span>
+<span class="co">#&gt; - .lintr defaults are not respected (#235)                                                     </span>
+<span class="co">#&gt; - Upgrade to roxygen2 7.x (#233)                                                               </span>
+<span class="co">#&gt; - respect client capability of snippetSupport (#231)                                           </span>
+<span class="co">#&gt; - Diagnostics not working for one-line document (#222)                                         </span>
+<span class="co">#&gt; - lsp crash on didOpen single file without a workspace folder (#219)                           </span>
+<span class="co">#&gt; - diagnostics_task error on certain parsing error (#218)                                       </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; $url</span>
-<span class="co">#&gt; [1] "https://cran.rstudio.com/src/contrib/collections_0.3.1.tar.gz"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $release_time</span>
-<span class="co">#&gt; [1] NA</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $latest</span>
-<span class="co">#&gt; [1] TRUE</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $tag</span>
-<span class="co">#&gt; [1] "v0.3.1"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $tag_time</span>
-<span class="co">#&gt; [1] "2020-04-30 03:32:56 UTC"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $sha</span>
-<span class="co">#&gt; [1] "30341faa249dfd52aa35849081a9e253fee748d9"</span></pre></div>
+<span class="co">#&gt; **Merged pull requests:**</span>
+<span class="co">#&gt; - Respect linter_file in diagnostics (#236)</span>
+<span class="co">#&gt; - Use roxygen2 7.1 (#234)</span>
+<span class="co">#&gt; - Respect client snippetSupport (#232)</span>
+<span class="co">#&gt; - Remove dependency on stringr (#230)</span>
+<span class="co">#&gt; - Remove dependency on readr (#229)</span>
+<span class="co">#&gt; - Always use content in diagnose_file (#223)</span>
+<span class="co">#&gt; - Fix handling null rootUri (#221)</span>
+<span class="co">#&gt; - Call diagnostics_callback on diagnostics_task error (#220)</span></pre></div>
 </div>
 <div id="docker" class="section level2">
 <h2 class="hasAnchor">
