@@ -87,30 +87,47 @@
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <p>Here is an example of <a href="https://github.com/REditorSupport/languageserver">languageserver</a>.</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tagbot</span>)
-<span class="co"># cd into a local git clone of `languageserver`</span>
+<div class="sourceCode" id="cb3"><pre class="r">library(tagbot)
+# cd into a local git clone of `languageserver`
 
-(<span class="no">release</span> <span class="kw">&lt;-</span> <span class="kw pkg">tagbot</span><span class="kw ns">::</span><span class="fu"><a href="reference/find_release.html">find_release</a></span>(<span class="st">"0.3.5"</span>))
-<span class="co">#&gt; languageserver v0.3.5 [tag:v0.3.5, sha:e3ab335]  </span>
+(release &lt;- tagbot::find_release("0.3.5")
+#&gt; languageserver v0.3.5 [tag:v0.3.5, sha:e3ab335]
 
-<span class="kw pkg">tagbot</span><span class="kw ns">::</span><span class="fu"><a href="reference/changelog.html">changelog</a></span>(<span class="no">release</span>)
-<span class="co">#&gt; **Closed issues:**                                                                             </span>
-<span class="co">#&gt; - .lintr defaults are not respected (#235)                                                     </span>
-<span class="co">#&gt; - Upgrade to roxygen2 7.x (#233)                                                               </span>
-<span class="co">#&gt; - respect client capability of snippetSupport (#231)                                           </span>
-<span class="co">#&gt; - Diagnostics not working for one-line document (#222)                                         </span>
-<span class="co">#&gt; - lsp crash on didOpen single file without a workspace folder (#219)                           </span>
-<span class="co">#&gt; - diagnostics_task error on certain parsing error (#218)                                       </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; **Merged pull requests:**</span>
-<span class="co">#&gt; - Respect linter_file in diagnostics (#236)</span>
-<span class="co">#&gt; - Use roxygen2 7.1 (#234)</span>
-<span class="co">#&gt; - Respect client snippetSupport (#232)</span>
-<span class="co">#&gt; - Remove dependency on stringr (#230)</span>
-<span class="co">#&gt; - Remove dependency on readr (#229)</span>
-<span class="co">#&gt; - Always use content in diagnose_file (#223)</span>
-<span class="co">#&gt; - Fix handling null rootUri (#221)</span>
-<span class="co">#&gt; - Call diagnostics_callback on diagnostics_task error (#220)</span></pre></div>
+# changelog for a particular release
+tagbot::changelog(release)
+#&gt; **Closed issues:**
+#&gt; - .lintr defaults are not respected (#235)
+#&gt; - Upgrade to roxygen2 7.x (#233)
+#&gt; - respect client capability of snippetSupport (#231)
+#&gt; - Diagnostics not working for one-line document (#222)
+#&gt; - lsp crash on didOpen single file without a workspace folder (#219)
+#&gt; - diagnostics_task error on certain parsing error (#218)
+#&gt;
+#&gt; **Merged pull requests:**
+#&gt; - Respect linter_file in diagnostics (#236)
+#&gt; - Use roxygen2 7.1 (#234)
+#&gt; - Respect client snippetSupport (#232)
+#&gt; - Remove dependency on stringr (#230)
+#&gt; - Remove dependency on readr (#229)
+#&gt; - Always use content in diagnose_file (#223)
+#&gt; - Fix handling null rootUri (#221)
+#&gt; - Call diagnostics_callback on diagnostics_task error (#220)
+
+# for dev changelog
+tagbot::changelog()
+#&gt; **Closed issues:**
+#&gt; - Rmd Color coding doesn't work if there is a space after the backticks and the bracket (#255)
+#&gt; - Language server crash when open a single file without a workspace folder (#249)
+#&gt; - language server uses excessive CPU (#245)
+#&gt;
+#&gt; **Merged pull requests:**
+#&gt; - Generalize rmd chunk pattern (#256)
+#&gt; - Add a test case for null workspace root (#252)
+#&gt; - respect NAMESPACE file (#248)
+#&gt; - Run tasks with delay to reduce CPU usage on input (#246)
+#&gt; - requires collections 0.3.0 (#243)
+#&gt; - experiemental setting to disable snippets (#240)
+#&gt; - fix enclosed_by_quotes (#239)</pre></div>
 </div>
 <div id="docker" class="section level2">
 <h2 class="hasAnchor">

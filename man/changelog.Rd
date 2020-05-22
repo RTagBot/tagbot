@@ -4,10 +4,10 @@
 \alias{changelog}
 \title{Show changelog of a particular release}
 \usage{
-changelog(release, new_release = FALSE)
+changelog(release = NULL, new_release = FALSE)
 }
 \arguments{
-\item{release}{the result of \code{find_release}}
+\item{release}{the result of \code{find_release} or NULL to show the current dev changelog.}
 
 \item{new_release}{is it the first release?}
 }

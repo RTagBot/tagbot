@@ -117,14 +117,14 @@
     <p>Show changelog of a particular release</p>
     </div>
 
-    <pre class="usage"><span class='fu'>changelog</span>(<span class='no'>release</span>, <span class='kw'>new_release</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>changelog</span>(<span class='kw'>release</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>new_release</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>release</th>
-      <td><p>the result of <code>find_release</code></p></td>
+      <td><p>the result of <code>find_release</code> or NULL to show the current dev changelog.</p></td>
     </tr>
     <tr>
       <th>new_release</th>

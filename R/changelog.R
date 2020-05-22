@@ -41,10 +41,14 @@ changelog_between <- function(after, before = "HEAD") {
 
 
 #' Show changelog of a particular release
-#' @param release the result of `find_release`
+#' @param release the result of `find_release` or NULL to show the current dev changelog.
 #' @param new_release is it the first release?
 #' @export
-changelog <- function(release, new_release = FALSE) {
+changelog <- function(release = NULL, new_release = FALSE) {
+    if (is.null(release)) {
+        release <- find_release()
+        return(changelog_between(release$sha, "HEAD"))
+    }
     if (new_release) {
         after <- git::git("rev-list", "--max-parents=0", "HEAD")
     } else {
