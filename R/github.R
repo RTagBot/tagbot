@@ -12,6 +12,9 @@ github_repo_name_from_remote <- function() {
     upstream <- tryCatch(
         git_upstream_from_active_branch(),
         error = function(e) "origin/master")
+    if (startsWith(upstream, "https://github.com/")) {
+        upstream <- gsub("https://github.com/", "", upstream)
+    }
     remote <- strsplit1(upstream, "/")[1]
     url <- trimws(git::git("remote", "get-url", remote))
     if (startsWith(url, "git@github.com:")) {
