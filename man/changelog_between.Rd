@@ -4,12 +4,10 @@
 \alias{changelog_between}
 \title{Show the closed github issues and merged pull requests between commits.}
 \usage{
-changelog_between(after, before = "HEAD")
+changelog_between(ref)
 }
 \arguments{
-\item{after}{character, the start commit}
-
-\item{before}{character, the end commit}
+\item{ref}{character, revision range}
 }
 \description{
 Show the closed github issues and merged pull requests between commits.
