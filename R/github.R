@@ -13,14 +13,14 @@ github_repo_name_from_remote <- function() {
         git_upstream_from_active_branch(),
         error = function(e) "origin/master")
     if (startsWith(upstream, "https://github.com/")) {
-        upstream <- gsub("https://github.com/", "", upstream)
+        upstream <- gsub("https://github\\.com/", "", upstream)
     }
     remote <- strsplit1(upstream, "/")[1]
     url <- trimws(git::git("remote", "get-url", remote))
     if (startsWith(url, "git@github.com:")) {
-        return(gsub("git@github.com:(.*?)\\.git", "\\1", url))
+        return(gsub("git@github\\.com:(.*?)\\.git", "\\1", url))
     } else if (startsWith(url, "https://github.com/")) {
-        return(gsub("https://github.com/(.*?)\\.git", "\\1", url))
+        return(gsub("https://github\\.com/(.*?)(?:\\.git)?", "\\1", url))
     }
     NULL
 }
@@ -78,6 +78,9 @@ github_pull_request <- function(number) {
 
 # https://help.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue
 github_extract_issues <- function(message) {
+    if (is.null(message)) {
+        return(character(0))
+    }
     re_match_all1(
         tolower(message),
         "\\b(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) #(\\d+)\\b"

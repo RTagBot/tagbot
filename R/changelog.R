@@ -1,17 +1,18 @@
 #' Show the closed github issues and merged pull requests between commits.
-#' @param after character, the start commit
-#' @param before character, the end commit
+#' @param ref character, revision range
 #' @export
-changelog_between <- function(after, before = "HEAD") {
-    commits <- git_log(glue("{trimws(after)}..{trimws(before)}"))
+changelog_between <- function(ref) {
+    commits <- git_log(ref)
 
     hashes <- map_chr(commits, "sha")
 
     since <- commits %>% pluck(length(.), "time")
+    until <- commits %>% pluck(1, "time")
     issues <- github_issues(since = since)
 
     prs <- issues %>%
         keep(~ hasName(., "pull_request")) %>%
+        keep(~ lubridate::ymd_hms(.$closed_at) <= until) %>%
         keep(function(issue) {
             pr <- github_pull_request(issue$number)
             pr$merged && pr$merge_commit_sha %in% hashes
@@ -47,7 +48,7 @@ changelog_between <- function(after, before = "HEAD") {
 changelog <- function(release = NULL, new_release = FALSE) {
     if (is.null(release)) {
         release <- find_release()
-        return(changelog_between(release$sha, "HEAD"))
+        return(changelog_between(glue("{release$sha}..HEAD")))
     }
     if (new_release) {
         after <- git::git("rev-list", "--max-parents=0", "HEAD")
@@ -58,7 +59,7 @@ changelog <- function(release = NULL, new_release = FALSE) {
         }
         after <- git::git("merge-base", prev_release$sha, "HEAD")
     }
-    changelog_between(after, release$sha)
+    changelog_between(glue("{trimws(after)}..{release$sha}"))
 }
 
 
