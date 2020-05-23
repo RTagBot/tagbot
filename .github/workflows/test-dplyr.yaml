@@ -52,3 +52,5 @@ jobs:
         run: |
           tagbot::changelog()
         shell: Rscript {0}
+        env:
+          GITHUB_PAT: ${{secrets.GITHUB_TOKEN}}
