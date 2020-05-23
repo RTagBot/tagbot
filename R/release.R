@@ -46,7 +46,7 @@ checkout_release <- function(releases, version) {
 }
 
 
-search_range <- function(version, releases, latest = FALSE) {
+search_range <- function(version, releases) {
     pkgnm <- pkg_name()
 
     since <- releases %>%
@@ -61,19 +61,13 @@ search_range <- function(version, releases, latest = FALSE) {
 }
 
 
-search_for_release <- function(release, after, before) {
+search_for_release <- function(release, ref, all_branches = FALSE) {
     work_tree <- pkg_release_download(release)
     watched_files <- readLines(file.path(work_tree, "MD5")) %>%
         re_match("[0-9a-f]+ \\*(.*)$") %>%
         map_chr(2)
-    if (is.null(before)) {
-        before <- "HEAD"
-    }
-    if (is.null(after)) {
-        hashes <- git_rev_list(before)
-    } else {
-        hashes <- git_rev_list(glue("{after}..{before}"))
-    }
+
+    hashes <- git_rev_list(ref, all = all_branches)
 
     work_tree_desc <- describe(file.path(work_tree, "DESCRIPTION"))
 
@@ -137,15 +131,32 @@ list_releases <- function() {
 #' @export
 find_release <- function(version = NULL) {
     pkgnm <- pkg_name()
-    latest <- is.null(version)
 
     releases <- list_releases()
     release <- checkout_release(releases, version)
 
-    bracket_releases <- search_range(release$version, releases, latest = latest)
+    bracketed_releases <- search_range(release$version, releases)
 
     if (is.null(release$sha)) {
-        hash <- search_for_release(release, bracket_releases$since$sha, bracket_releases$until$sha)
+        if (is.null(bracketed_releases$until$sha)) {
+            to_sha <- "HEAD"
+        } else {
+            to_sha <- bracketed_releases$until$sha
+        }
+        if (is.null(bracketed_releases$since$sha)) {
+            ref <- to_sha
+        } else {
+            ref <- glue("{bracketed_releases$since$sha}..{to_sha}")
+        }
+
+        # first search between known bracketed releases
+        hash <- search_for_release(release, ref)
+
+        if (is.null(hash) && !is.null(bracketed_releases$since$sha)) {
+            # then search all branches
+            hash <- search_for_release(
+                release, glue("{bracketed_releases$since$sha}.."), all_branches = TRUE)
+        }
 
         if (is.null(hash)) {
             stop("cannot determine release", call. = FALSE)
@@ -157,7 +168,7 @@ find_release <- function(version = NULL) {
         keep(possibly(~ compare_version(.$version, release$version) < 0, FALSE)) %>%
         pluck(length(.), "version", .default = "")
 
-    pervious_tagged_release <- bracket_releases$since
+    pervious_tagged_release <- bracketed_releases$since
     if (!is.null(pervious_tagged_release) &&
             pervious_tagged_release$version == pervious_release_version) {
         attr(release, "previous") <- pervious_tagged_release

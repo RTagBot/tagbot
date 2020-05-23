@@ -28,9 +28,14 @@ git_upstream_from_active_branch <- function() {
 }
 
 
-git_rev_list <- function(ref) {
-    git("rev-list", ref) %>%
-        strsplit1("\n")
+git_rev_list <- function(ref, all = FALSE) {
+    if (all) {
+        git("rev-list", "--all", ref) %>%
+            strsplit1("\n")
+    } else {
+        git("rev-list", ref) %>%
+            strsplit1("\n")
+    }
 }
 
 
