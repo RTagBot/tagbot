@@ -1,0 +1,46 @@
+name: docker
+
+on:
+  schedule:
+    # every six hour
+    - cron: 0 */6 * * *
+
+jobs:
+  test-find_release:
+    runs-on: ubuntu-latest
+    container: rtagbot/tagbot:latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: tidyverse/dplyr
+          fetch-depth: 0
+      - name: fetch all tags
+        run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      - name: remove last tag
+        run: |
+          release <- tagbot::find_release()
+          git::git("checkout", "-b", "last-tag-branch", release$tag)
+          git::git("checkout", "master")
+          git::git("tag", "-d", release$tag)
+        shell: Rscript {0}
+      - name: find release
+        run: |
+          tagbot::find_release()
+        shell: Rscript {0}
+
+  test-changelog:
+    runs-on: ubuntu-latest
+    container: rtagbot/tagbot:latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: tidyverse/dplyr
+          fetch-depth: 0
+      - name: fetch all tags
+        run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      - name: print changelog
+        run: |
+          tagbot::changelog()
+        shell: Rscript {0}
+        env:
+          GITHUB_PAT: ${{secrets.GITHUB_TOKEN}}
