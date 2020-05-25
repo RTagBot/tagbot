@@ -101,13 +101,8 @@ jobs:
     container: rtagbot/tagbot:latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: fetch all tags and branches
-        run: git fetch --all
-
-      - run: git merge-base 5d33096 HEAD
-
+        run: git fetch --prune --unshallow --tags
       - name: check and publish release
         run: |
           tagbot::publish_release()
