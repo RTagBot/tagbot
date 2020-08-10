@@ -17,12 +17,6 @@ git_tag <- function() {
 }
 
 
-git_latest_tag <- function() {
-    tags <- git_tag()
-    tags %>% detect(~ .$time == max(map_dbl(tags, "time")))
-}
-
-
 git_upstream_from_active_branch <- function() {
     git("rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}")
 }

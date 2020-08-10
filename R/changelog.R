@@ -8,7 +8,7 @@ changelog_between <- function(ref) {
 
     since <- commits %>% pluck(length(.), "time")
     until <- commits %>% pluck(1, "time")
-    issues <- github_issues(since = since)
+    issues <- github_issues(since = since - lubridate::dhours(1))
 
     prs <- issues %>%
         keep(~ hasName(., "pull_request")) %>%
@@ -59,7 +59,7 @@ changelog <- function(release = NULL, new_release = FALSE) {
         }
         after <- git::git("merge-base", prev_release$sha, "HEAD")
     }
-    changelog_between(glue("{trimws(after)}..{release$sha}"))
+    changelog_between(glue("{trimws(after)}^..{release$sha}"))
 }
 
 
