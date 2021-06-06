@@ -53,7 +53,7 @@ compare_version <- function(ver1, ver2) {
     } else {
         ver2 <- c(ver2, integer(-dlen))
     }
-    for (i in seq_len(length(ver1))) {
+    for (i in seq_along(ver1)) {
         if (ver1[i] < ver2[i]) {
             return(-1L)
         } else if (ver1[i] > ver2[i]) {
