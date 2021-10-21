@@ -1,4 +1,4 @@
-FROM rocker/r-base:3.6.3
+FROM rocker/r-base:latest
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
