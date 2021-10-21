@@ -9,6 +9,8 @@ jobs:
   test-find_release:
     runs-on: ubuntu-latest
     container: rtagbot/tagbot:latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -30,6 +32,8 @@ jobs:
   test-changelog:
     runs-on: ubuntu-latest
     container: rtagbot/tagbot:latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -40,5 +44,3 @@ jobs:
         run: |
           tagbot::changelog()
         shell: Rscript {0}
-        env:
-          GITHUB_PAT: ${{secrets.GITHUB_TOKEN}}
