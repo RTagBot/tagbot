@@ -5,8 +5,6 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/rtagbot/tagbot/workflows/R-CMD-check/badge.svg)](https://github.com/rtagbot/tagbot/actions)
-[![test](https://github.com/rtagbot/tagbot/workflows/test/badge.svg)](https://github.com/rtagbot/tagbot/actions)
-[![docker](https://github.com/rtagbot/tagbot/workflows/docker/badge.svg)](https://github.com/rtagbot/tagbot/actions)
 [![codecov](https://codecov.io/gh/rtagbot/tagbot/branch/master/graph/badge.svg)](https://codecov.io/gh/rtagbot/tagbot)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/tagbot)](https://cran.r-project.org/package=tagbot)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/tagbot)](https://cran.r-project.org/package=tagbot)
@@ -83,7 +81,7 @@ tagbot::changelog()
 
 ## GitHub workflows
 
-  - Check and publish github release every six hours.
+-   Check and publish github release every six hours.
 
 Put the following in `.github/workflows/tagbot.yml`
 

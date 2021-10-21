@@ -1,8 +1,22 @@
+```{r reprex-options, include = FALSE}
+options(
+  keep.source = TRUE,
+  rlang_trace_top_env = globalenv(),
+  `rlang:::force_unhandled_error` = TRUE,
+  rlang_backtrace_on_error = "full",
+  crayon.enabled = FALSE,
+  reprex.current_venue = "gh"
+)
+```
+
+```{r, results = 'asis', echo = FALSE, include = file.exists('.Rprofile'), eval = file.exists('.Rprofile')}
+cat(sprintf("*Local `.Rprofile` detected at `%s`*", normalizePath(".Rprofile")))
+```
+
 ---
 output:
   reprex::reprex_document:
     advertise: false
-    html_preview: false
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -18,8 +32,6 @@ cat(c("# ", paste(trimws(strsplit(title, "\n")[[1]]), collapse = " ")))
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/rtagbot/tagbot/workflows/R-CMD-check/badge.svg)](https://github.com/rtagbot/tagbot/actions)
-[![test](https://github.com/rtagbot/tagbot/workflows/test/badge.svg)](https://github.com/rtagbot/tagbot/actions)
-[![docker](https://github.com/rtagbot/tagbot/workflows/docker/badge.svg)](https://github.com/rtagbot/tagbot/actions)
 [![codecov](https://codecov.io/gh/rtagbot/tagbot/branch/master/graph/badge.svg)](https://codecov.io/gh/rtagbot/tagbot)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/tagbot)](https://cran.r-project.org/package=tagbot)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/tagbot)](https://cran.r-project.org/package=tagbot)
