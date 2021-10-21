@@ -1,6 +1,6 @@
 Package: tagbot
 Title: Publish GitHub Releases
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     person(given = "Randy",
            family = "Lai",
