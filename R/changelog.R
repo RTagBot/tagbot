@@ -69,7 +69,7 @@ format_changelog <- function(chlog) {
     if (length(chlog$issues) > 0) {
         msg <- paste0(
             msg,
-            "**Closed issues:**\n",
+            "**Closed issues:**\n\n",
             paste0(chlog$issues %>%
                         map(~glue("- {.$title} (#{.$number})")), collapse = "\n"),
             "\n"
@@ -81,7 +81,7 @@ format_changelog <- function(chlog) {
         }
         msg <- paste0(
             msg,
-            "**Merged pull requests:**\n",
+            "**Merged pull requests:**\n\n",
             paste0(chlog$pull_requests %>%
                         map(~glue("- {.$title} (#{.$number})")), collapse = "\n"),
             "\n\n"
