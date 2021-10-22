@@ -1,22 +1,5 @@
-```{r reprex-options, include = FALSE}
-options(
-  keep.source = TRUE,
-  rlang_trace_top_env = globalenv(),
-  `rlang:::force_unhandled_error` = TRUE,
-  rlang_backtrace_on_error = "full",
-  crayon.enabled = FALSE,
-  reprex.current_venue = "gh"
-)
-```
-
-```{r, results = 'asis', echo = FALSE, include = file.exists('.Rprofile'), eval = file.exists('.Rprofile')}
-cat(sprintf("*Local `.Rprofile` detected at `%s`*", normalizePath(".Rprofile")))
-```
-
 ---
-output:
-  reprex::reprex_document:
-    advertise: false
+output: github_document
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -109,9 +92,9 @@ tagbot::changelog()
 
 ## GitHub workflows
 
-- Check and publish github release every six hours.
+`tagbot` is able to match CRAN releases with repo commits and tag the matching commit. It is required that the commit is pushed to any branches of the repo.
 
-Put the following in `.github/workflows/tagbot.yml`
+To check and publish github release every six hours, put the following in `.github/workflows/tagbot.yml`
 
 ```yml
 name: tagbot

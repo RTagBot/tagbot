@@ -1,3 +1,4 @@
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # Publish GitHub Releases
@@ -14,11 +15,17 @@ Github: <https://github.com/RTagBot/tagbot>
 
 Documentation: <https://rtagbot.github.io/tagbot>
 
-Simplify the process of making a GitHub release. There are three major features provided by ‘tagbot’. 1. It performs ‘diff’ between the source file of a release and the package’s git repo to decide which commit is corresponding to the release. 2. It generates a changelog of closed issues and merged pull requested from GitHub API. 3. It publishes a GitHub release with the changelog.
+Simplify the process of making a GitHub release. There are three major
+features provided by ‘tagbot’. 1. It performs ‘diff’ between the source
+file of a release and the package’s git repo to decide which commit is
+corresponding to the release. 2. It generates a changelog of closed
+issues and merged pull requested from GitHub API. 3. It publishes a
+GitHub release with the changelog.
 
 ## Installation
 
-You can install the released version of tagbot from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of tagbot from
+[CRAN](https://CRAN.R-project.org) with:
 
 ``` r
 install.packages("tagbot")
@@ -33,7 +40,8 @@ devtools::install_github("rtagbot/tagbot")
 
 ## Example
 
-Here is an example of [languageserver](https://github.com/REditorSupport/languageserver).
+Here is an example of
+[languageserver](https://github.com/REditorSupport/languageserver).
 
 ``` r
 library(tagbot)
@@ -81,9 +89,12 @@ tagbot::changelog()
 
 ## GitHub workflows
 
--   Check and publish github release every six hours.
+`tagbot` is able to match CRAN releases with repo commits and tag the
+matching commit. It is required that the commit is pushed to any
+branches of the repo.
 
-Put the following in `.github/workflows/tagbot.yml`
+To check and publish github release every six hours, put the following
+in `.github/workflows/tagbot.yml`
 
 ``` yml
 name: tagbot
@@ -109,10 +120,12 @@ jobs:
           GITHUB_PAT: ${{secrets.GITHUB_TOKEN}}
 ```
 
-Example release: <https://github.com/randy3k/collections/releases/tag/v0.3.1>
+Example release:
+<https://github.com/randy3k/collections/releases/tag/v0.3.1>
 
 <img width="936" alt="Screen Shot 2020-05-24 at 2 54 12 PM" src="https://user-images.githubusercontent.com/1690993/82765778-7b8ec780-9dce-11ea-9d32-1502075ce24a.png">
 
 ## Docker
 
-A docker image with tagbot preinstalled in avaiable at docker [hub](https://hub.docker.com/r/rtagbot/tagbot).
+A docker image with tagbot preinstalled in avaiable at docker
+[hub](https://hub.docker.com/r/rtagbot/tagbot).
