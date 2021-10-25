@@ -25,4 +25,4 @@ Imports:
     rlang,
     rprojroot
 Remotes:
-    rtagbot/git
+    rtagbot/gitline
