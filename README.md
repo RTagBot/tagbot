@@ -16,10 +16,10 @@ Github: <https://github.com/RTagBot/tagbot>
 Documentation: <https://rtagbot.github.io/tagbot>
 
 Simplify the process of making a GitHub release. There are three major
-features provided by ‘tagbot’. 1. It performs ‘diff’ between the source
-file of a release and the package’s git repo to decide which commit is
-corresponding to the release. 2. It generates a changelog of closed
-issues and merged pull requested from GitHub API. 3. It publishes a
+features provided by ‘tagbot’. First, it determines which commit
+corresponds to a release by diffing the source files of the release and
+the package’s git repo. It also generates a changelog of closed issues
+and merged pull requests from GitHub API. And finally, it publishes a
 GitHub release with the changelog.
 
 ## Installation
