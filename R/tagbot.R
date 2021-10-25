@@ -2,7 +2,7 @@
 #' @importFrom utils available.packages download.file untar capture.output hasName
 #' @import purrr
 #' @importFrom glue glue
-#' @importFrom git git
+#' @importFrom gitline git
 #' @aliases NULL
 "_PACKAGE"
 

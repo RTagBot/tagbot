@@ -20,9 +20,9 @@ jobs:
       - name: remove last tag
         run: |
           release <- tagbot::find_release()
-          git::git("checkout", "-b", "last-tag-branch", release$tag)
-          git::git("checkout", "master")
-          git::git("tag", "-d", release$tag)
+          gitline::git("checkout", "-b", "last-tag-branch", release$tag)
+          gitline::git("checkout", "master")
+          gitline::git("tag", "-d", release$tag)
         shell: Rscript {0}
       - name: find release
         run: |

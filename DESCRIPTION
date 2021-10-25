@@ -1,7 +1,7 @@
 Package: tagbot
 Title: Publish GitHub Releases
 Version: 0.1.2
-Authors@R: 
+Authors@R:
     person(given = "Randy",
            family = "Lai",
            role = c("aut", "cre"),
@@ -10,14 +10,14 @@ Description: Simplify the process of making a GitHub release. There are three ma
 License: MIT + file LICENSE
 URL: https://github.com/RTagBot/tagbot
 BugReports: https://github.com/RTagBot/tagbot/issues
-Suggests: 
+Suggests:
     testthat
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
-Imports: 
-    git,
+RoxygenNote: 7.1.2
+Imports:
+    gitline,
     glue,
     gh,
     lubridate,

@@ -16,7 +16,7 @@ github_repo_name_from_remote <- function() {
         upstream <- gsub("https://github\\.com/", "", upstream)
     }
     remote <- strsplit1(upstream, "/")[1]
-    url <- trimws(git::git("remote", "get-url", remote))
+    url <- trimws(git("remote", "get-url", remote))
     if (startsWith(url, "git@github.com:")) {
         return(gsub("git@github\\.com:(.*?)\\.git", "\\1", url))
     } else if (startsWith(url, "https://github.com/")) {

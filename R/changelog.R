@@ -51,13 +51,13 @@ changelog <- function(release = NULL, new_release = FALSE) {
         return(changelog_between(glue("{release$sha}..HEAD")))
     }
     if (new_release) {
-        after <- git::git("rev-list", "--max-parents=0", "HEAD")
+        after <- git("rev-list", "--max-parents=0", "HEAD")
     } else {
         prev_release <- attr(release, "previous")
         if (is.null(prev_release)) {
             stop("cannot determine previous release")
         }
-        after <- git::git("merge-base", prev_release$sha, "HEAD")
+        after <- git("merge-base", prev_release$sha, "HEAD")
     }
     changelog_between(glue("{trimws(after)}^..{release$sha}"))
 }
