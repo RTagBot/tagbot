@@ -1,3 +1,28 @@
+get_git_path  <- function() {
+    path <- getOption("git_path", Sys.which("git"))
+    if (is.null(path) && .Platform$OS.type == "windows") {
+        paths <- c(
+            "C:\\Program Files\\Git\\bin\\git.exe",
+            "C:\\Program Files (x86)\\Git\\bin\\git.exe"
+        )
+        for (p in paths) {
+            if (file.exists(p)) {
+                return(p)
+            }
+        }
+    }
+    if (is.null(path) || !nzchar(path)) {
+        abort("cannot find 'git' binary")
+    }
+    path
+}
+
+
+git <- function(...) {
+    git_path <- get_git_path()
+    cliff::run(git_path, ...)
+}
+
 git_tag <- function() {
     git("tag", paste0(
             "--format=",

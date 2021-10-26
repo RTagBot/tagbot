@@ -24,9 +24,9 @@ jobs:
       - name: remove last tag
         run: |
           release <- tagbot::find_release()
-          gitline::git("checkout", "-b", "last-tag-branch", release$tag)
-          gitline::git("checkout", "master")
-          gitline::git("tag", "-d", release$tag)
+          cliff::run("git", "checkout", "-b", "last-tag-branch", release$tag)
+          cliff::run("git", "checkout", "master")
+          cliff::run("git", "tag", "-d", release$tag)
         shell: Rscript {0}
       - name: find release
         run: |

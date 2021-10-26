@@ -16,8 +16,9 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
+SystemRequirements: git (>= 2.0.0)
 Imports:
-    gitline,
+    cliff,
     glue,
     gh,
     lubridate,
@@ -25,4 +26,4 @@ Imports:
     rlang,
     rprojroot
 Remotes:
-    rtagbot/gitline
+    rtagbot/cliff

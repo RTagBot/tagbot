@@ -4,6 +4,14 @@
 changelog_between <- function(ref) {
     commits <- git_log(ref)
 
+    chlog <- structure(
+        list(issues = list(), pull_requests = list()), class = "changelog"
+    )
+
+    if (length(commits) == 0) {
+        return(chlog)
+    }
+
     hashes <- map_chr(commits, "sha")
 
     since <- commits %>% pluck(length(.), "time")
@@ -29,15 +37,14 @@ changelog_between <- function(ref) {
 
     numbers <- sort(union(closed_by_prs, closed_by_commits))
 
-    closed_issues <- issues %>%
+    chlog$issues <- issues %>%
         keep(~.$number %in% numbers) %>%
         map(~list(number = .$number, title = .$title, body = .$body))
-    merged_prs <- prs %>%
+    chlog$pull_requests <- prs %>%
         discard(~.$number %in% numbers) %>%
         map(~list(number = .$number, title = .$title, body = .$body))
-    structure(
-        list(issues = closed_issues, pull_requests = merged_prs), class = "changelog"
-    )
+
+    chlog
 }
 
 
