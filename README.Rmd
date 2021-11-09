@@ -14,7 +14,7 @@ cat(c("# ", paste(trimws(strsplit(title, "\n")[[1]]), collapse = " ")))
 ```
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/rtagbot/tagbot/workflows/R-CMD-check/badge.svg)](https://github.com/rtagbot/tagbot/actions)
+[![check](https://github.com/rtagbot/tagbot/actions/workflows/check.yaml/badge.svg)](https://github.com/rtagbot/tagbot/actions/workflows/check.yaml)
 [![codecov](https://codecov.io/gh/rtagbot/tagbot/branch/master/graph/badge.svg)](https://codecov.io/gh/rtagbot/tagbot)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/tagbot)](https://cran.r-project.org/package=tagbot)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/tagbot)](https://cran.r-project.org/package=tagbot)
