@@ -25,5 +25,3 @@ Imports:
     purrr,
     rlang,
     rprojroot
-Remotes:
-    rtagbot/cliff
