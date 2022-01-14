@@ -25,7 +25,7 @@ jobs:
         run: |
           release <- tagbot::find_release()
           cliff::run("git", "checkout", "-b", "last-tag-branch", release$tag)
-          cliff::run("git", "checkout", "master")
+          cliff::run("git", "checkout", "main")
           cliff::run("git", "tag", "-d", release$tag)
         shell: Rscript {0}
       - name: find release
