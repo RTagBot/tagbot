@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,25 +33,19 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">tagbot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/RTagBot/tagbot/">
+  <a href="https://github.com/RTagBot/tagbot/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -66,75 +62,74 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="publish-github-releases" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#publish-github-releases" class="anchor"></a>Publish GitHub Releases</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="publish-github-releases">Publish GitHub Releases<a class="anchor" aria-label="anchor" href="#publish-github-releases"></a>
+</h1></div>
 <!-- badges: start -->
-
-<p>Github: <a href="https://github.com/RTagBot/tagbot" class="uri">https://github.com/RTagBot/tagbot</a></p>
-<p>Documentation: <a href="https://rtagbot.github.io/tagbot" class="uri">https://rtagbot.github.io/tagbot</a></p>
+<p>Github: <a href="https://github.com/RTagBot/tagbot" class="external-link uri">https://github.com/RTagBot/tagbot</a></p>
+<p>Documentation: <a href="https://rtagbot.github.io/tagbot" class="external-link uri">https://rtagbot.github.io/tagbot</a></p>
 <p>Simplify the process of making a GitHub release. There are three major features provided by ‘tagbot’. First, it determines which commit corresponds to a release by diffing the source files of the release and the package’s git repo. It also generates a changelog of closed issues and merged pull requests from GitHub API. And finally, it publishes a GitHub release with the changelog.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of tagbot from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the released version of tagbot from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"tagbot"</span><span class="op">)</span></code></pre></div>
-<p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"tagbot"</span><span class="op">)</span></span></code></pre></div>
+<p>And the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"rtagbot/tagbot"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"rtagbot/tagbot"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>Here is an example of <a href="https://github.com/REditorSupport/languageserver">languageserver</a>.</p>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
+<p>Here is an example of <a href="https://github.com/REditorSupport/languageserver" class="external-link">languageserver</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RTagBot/tagbot">tagbot</a></span><span class="op">)</span>
-<span class="co"># cd into a local git clone of `languageserver`</span>
-
-<span class="op">(</span><span class="va">release</span> <span class="op">&lt;-</span> <span class="fu">tagbot</span><span class="fu">::</span><span class="fu"><a href="reference/find_release.html">find_release</a></span><span class="op">(</span><span class="st">"0.3.5"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; languageserver v0.3.5 [tag:v0.3.5, sha:e3ab335]</span>
-
-<span class="co"># changelog for a particular release</span>
-<span class="fu">tagbot</span><span class="fu">::</span><span class="fu"><a href="reference/changelog.html">changelog</a></span><span class="op">(</span><span class="va">release</span><span class="op">)</span>
-<span class="co">#&gt; **Closed issues:**</span>
-<span class="co">#&gt; - .lintr defaults are not respected (#235)</span>
-<span class="co">#&gt; - Upgrade to roxygen2 7.x (#233)</span>
-<span class="co">#&gt; - respect client capability of snippetSupport (#231)</span>
-<span class="co">#&gt; - Diagnostics not working for one-line document (#222)</span>
-<span class="co">#&gt; - lsp crash on didOpen single file without a workspace folder (#219)</span>
-<span class="co">#&gt; - diagnostics_task error on certain parsing error (#218)</span>
-<span class="co">#&gt;</span>
-<span class="co">#&gt; **Merged pull requests:**</span>
-<span class="co">#&gt; - Respect linter_file in diagnostics (#236)</span>
-<span class="co">#&gt; - Use roxygen2 7.1 (#234)</span>
-<span class="co">#&gt; - Respect client snippetSupport (#232)</span>
-<span class="co">#&gt; - Remove dependency on stringr (#230)</span>
-<span class="co">#&gt; - Remove dependency on readr (#229)</span>
-<span class="co">#&gt; - Always use content in diagnose_file (#223)</span>
-<span class="co">#&gt; - Fix handling null rootUri (#221)</span>
-<span class="co">#&gt; - Call diagnostics_callback on diagnostics_task error (#220)</span>
-
-<span class="co"># for dev changelog</span>
-<span class="fu">tagbot</span><span class="fu">::</span><span class="fu"><a href="reference/changelog.html">changelog</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; **Closed issues:**</span>
-<span class="co">#&gt; - Rmd Color coding doesn't work if there is a space after the backticks and the bracket (#255)</span>
-<span class="co">#&gt; - Language server crash when open a single file without a workspace folder (#249)</span>
-<span class="co">#&gt; - language server uses excessive CPU (#245)</span>
-<span class="co">#&gt;</span>
-<span class="co">#&gt; **Merged pull requests:**</span>
-<span class="co">#&gt; - Generalize rmd chunk pattern (#256)</span>
-<span class="co">#&gt; - Add a test case for null workspace root (#252)</span>
-<span class="co">#&gt; - respect NAMESPACE file (#248)</span>
-<span class="co">#&gt; - Run tasks with delay to reduce CPU usage on input (#246)</span>
-<span class="co">#&gt; - requires collections 0.3.0 (#243)</span>
-<span class="co">#&gt; - experiemental setting to disable snippets (#240)</span>
-<span class="co">#&gt; - fix enclosed_by_quotes (#239)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RTagBot/tagbot" class="external-link">tagbot</a></span><span class="op">)</span></span>
+<span><span class="co"># cd into a local git clone of `languageserver`</span></span>
+<span></span>
+<span><span class="op">(</span><span class="va">release</span> <span class="op">&lt;-</span> <span class="fu">tagbot</span><span class="fu">::</span><span class="fu"><a href="reference/find_release.html">find_release</a></span><span class="op">(</span><span class="st">"0.3.5"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; languageserver v0.3.5 [tag:v0.3.5, sha:e3ab335]</span></span>
+<span></span>
+<span><span class="co"># changelog for a particular release</span></span>
+<span><span class="fu">tagbot</span><span class="fu">::</span><span class="fu"><a href="reference/changelog.html">changelog</a></span><span class="op">(</span><span class="va">release</span><span class="op">)</span></span>
+<span><span class="co">#&gt; **Closed issues:**</span></span>
+<span><span class="co">#&gt; - .lintr defaults are not respected (#235)</span></span>
+<span><span class="co">#&gt; - Upgrade to roxygen2 7.x (#233)</span></span>
+<span><span class="co">#&gt; - respect client capability of snippetSupport (#231)</span></span>
+<span><span class="co">#&gt; - Diagnostics not working for one-line document (#222)</span></span>
+<span><span class="co">#&gt; - lsp crash on didOpen single file without a workspace folder (#219)</span></span>
+<span><span class="co">#&gt; - diagnostics_task error on certain parsing error (#218)</span></span>
+<span><span class="co">#&gt;</span></span>
+<span><span class="co">#&gt; **Merged pull requests:**</span></span>
+<span><span class="co">#&gt; - Respect linter_file in diagnostics (#236)</span></span>
+<span><span class="co">#&gt; - Use roxygen2 7.1 (#234)</span></span>
+<span><span class="co">#&gt; - Respect client snippetSupport (#232)</span></span>
+<span><span class="co">#&gt; - Remove dependency on stringr (#230)</span></span>
+<span><span class="co">#&gt; - Remove dependency on readr (#229)</span></span>
+<span><span class="co">#&gt; - Always use content in diagnose_file (#223)</span></span>
+<span><span class="co">#&gt; - Fix handling null rootUri (#221)</span></span>
+<span><span class="co">#&gt; - Call diagnostics_callback on diagnostics_task error (#220)</span></span>
+<span></span>
+<span><span class="co"># for dev changelog</span></span>
+<span><span class="fu">tagbot</span><span class="fu">::</span><span class="fu"><a href="reference/changelog.html">changelog</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; **Closed issues:**</span></span>
+<span><span class="co">#&gt; - Rmd Color coding doesn't work if there is a space after the backticks and the bracket (#255)</span></span>
+<span><span class="co">#&gt; - Language server crash when open a single file without a workspace folder (#249)</span></span>
+<span><span class="co">#&gt; - language server uses excessive CPU (#245)</span></span>
+<span><span class="co">#&gt;</span></span>
+<span><span class="co">#&gt; **Merged pull requests:**</span></span>
+<span><span class="co">#&gt; - Generalize rmd chunk pattern (#256)</span></span>
+<span><span class="co">#&gt; - Add a test case for null workspace root (#252)</span></span>
+<span><span class="co">#&gt; - respect NAMESPACE file (#248)</span></span>
+<span><span class="co">#&gt; - Run tasks with delay to reduce CPU usage on input (#246)</span></span>
+<span><span class="co">#&gt; - requires collections 0.3.0 (#243)</span></span>
+<span><span class="co">#&gt; - experiemental setting to disable snippets (#240)</span></span>
+<span><span class="co">#&gt; - fix enclosed_by_quotes (#239)</span></span></code></pre></div>
 </div>
-<div id="github-workflows" class="section level2">
-<h2 class="hasAnchor">
-<a href="#github-workflows" class="anchor"></a>GitHub workflows</h2>
+<div class="section level2">
+<h2 id="github-workflows">GitHub workflows<a class="anchor" aria-label="anchor" href="#github-workflows"></a>
+</h2>
 <p><code>tagbot</code> is able to match CRAN releases with repo commits and tag the matching commit. It is required that the commit is pushed to any branches of the repo.</p>
 <p>To check and publish github release every six hours, put the following in <code>.github/workflows/tagbot.yml</code></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode yml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> tagbot</span></span>
@@ -149,69 +144,80 @@
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">container</span><span class="kw">:</span><span class="at"> rtagbot/tagbot:latest</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v2</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> fetch all tags and branches</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> git fetch --prune --unshallow --tags</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v3</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">fetch-depth</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> check and publish release</span></span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>          tagbot::publish_release()</span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">shell</span><span class="kw">:</span><span class="at"> Rscript {0}</span></span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">GITHUB_PAT</span><span class="kw">:</span><span class="at"> ${{secrets.GITHUB_TOKEN}}</span></span></code></pre></div>
-<p>Example release: <a href="https://github.com/randy3k/collections/releases/tag/v0.3.1" class="uri">https://github.com/randy3k/collections/releases/tag/v0.3.1</a></p>
+<p>Example release: <a href="https://github.com/randy3k/collections/releases/tag/v0.3.1" class="external-link uri">https://github.com/randy3k/collections/releases/tag/v0.3.1</a></p>
 <p><img width="936" alt="Screen Shot 2020-05-24 at 2 54 12 PM" src="https://user-images.githubusercontent.com/1690993/82765778-7b8ec780-9dce-11ea-9d32-1502075ce24a.png"></p>
 </div>
-<div id="docker" class="section level2">
-<h2 class="hasAnchor">
-<a href="#docker" class="anchor"></a>Docker</h2>
-<p>A docker image with tagbot preinstalled in avaiable at docker <a href="https://hub.docker.com/r/rtagbot/tagbot">hub</a>.</p>
+<div class="section level2">
+<h2 id="docker">Docker<a class="anchor" aria-label="anchor" href="#docker"></a>
+</h2>
+<p>A docker image with tagbot preinstalled in avaiable at docker <a href="https://hub.docker.com/r/rtagbot/tagbot" class="external-link">hub</a>.</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/RTagBot/tagbot/">https://​github.com/​RTagBot/​tagbot/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/RTagBot/tagbot/issues">https://​github.com/​RTagBot/​tagbot/​issues</a>
-</li>
+<li><a href="https://github.com/RTagBot/tagbot/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/RTagBot/tagbot/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing tagbot</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Randy Lai <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/rtagbot/tagbot/actions"><img src="https://github.com/rtagbot/tagbot/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://codecov.io/gh/rtagbot/tagbot"><img src="https://codecov.io/gh/rtagbot/tagbot/branch/master/graph/badge.svg" alt="codecov"></a></li>
-<li><a href="https://cran.r-project.org/package=tagbot"><img src="https://www.r-pkg.org/badges/version/tagbot" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://cran.r-project.org/package=tagbot"><img src="https://cranlogs.r-pkg.org/badges/grand-total/tagbot"></a></li>
+<li><a href="https://github.com/rtagbot/tagbot/actions/workflows/check.yaml" class="external-link"><img src="https://github.com/rtagbot/tagbot/actions/workflows/check.yaml/badge.svg" alt="check"></a></li>
+<li><a href="https://codecov.io/gh/rtagbot/tagbot" class="external-link"><img src="https://codecov.io/gh/rtagbot/tagbot/branch/master/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://cran.r-project.org/package=tagbot" class="external-link"><img src="https://www.r-pkg.org/badges/version/tagbot" alt="CRAN_Status_Badge"></a></li>
+<li><a href="https://cran.r-project.org/package=tagbot" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/tagbot"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Randy Lai.</p>
+  <p></p>
+<p>Developed by Randy Lai.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -219,6 +225,8 @@
 
   
 
+
+  
 
   </body>
 </html>

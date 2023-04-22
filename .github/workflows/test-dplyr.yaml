@@ -4,6 +4,11 @@ on: [push, pull_request]
 
 
 jobs:
+  cancel-previous-runs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: randy3k/gh-actions/cancel-previous-runs@main
+  
   test-find_release:
     runs-on: macos-latest
     env:
