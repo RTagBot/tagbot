@@ -109,9 +109,9 @@ jobs:
     runs-on: ubuntu-latest
     container: rtagbot/tagbot:latest
     steps:
-      - uses: actions/checkout@v2
-      - name: fetch all tags and branches
-        run: git fetch --prune --unshallow --tags
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: check and publish release
         run: |
           tagbot::publish_release()
