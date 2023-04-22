@@ -19,8 +19,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: tidyverse/dplyr
-      - name: fetch all tags and branches
-        run: git fetch --prune --unshallow --tags
+          fetch-depth: 0
       - name: remove last tag
         run: |
           release <- tagbot::find_release()
@@ -48,8 +47,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: tidyverse/dplyr
-      - name: fetch all tags and branches
-        run: git fetch --prune --unshallow --tags
+          fetch-depth: 0
       - name: print changelog
         run: |
           tagbot::changelog()
