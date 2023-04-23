@@ -8,5 +8,7 @@ RUN apt-get update \
 
 COPY . /tagbot
 
+# fix https://github.com/actions/checkout/issues/1169
+RUN git config --system --add safe.directory "*"
 RUN Rscript -e "install.packages('remotes')"
 RUN Rscript -e "remotes::install_local('/tagbot/')"
